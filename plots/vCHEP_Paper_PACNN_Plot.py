@@ -5,6 +5,7 @@ import pandas as pd
 from matplotlib.ticker import (MultipleLocator, 
                                FormatStrFormatter, 
                                AutoMinorLocator) 
+import mplhep as hep
 
 ## The data values correspond to the following asymmetry values:
 ## 0.0,0.5,1.5,2.0,2.5,3.0,5.0,7.5,9.0*
@@ -46,30 +47,37 @@ groups = ("BM_ACN_4i4_P_6L (10966)", "ACN_4i4_P_6L_1S_BN_RC1 (11975)",
         "ACN_4i4_P_8L_3S (18719)", "ACN_4i4_P_10L_4S_BN (19646)", 
         "ACN_4i4_8L_DenseNet_BN (41983)")
 colors = ("black", "blue", "red", "green", "purple")
-markers = ("D", ",", "o", "v", "^")
+markers = ("D", "s", "o", "v", "^")
 
+# set style to CERN standard
+plt.style.use(hep.style.ROOT)
 # set size of figure
-fig = plt.figure(num=1, figsize=(7,7), dpi=80, facecolor='w', edgecolor='k')
+fig = plt.figure(num=1, figsize=(12,8), dpi=80, facecolor='w', edgecolor='k')
 # set x-axis ticks to have 0 decimal places
 ax = fig.add_subplot(111)
 # set x-axis ticks to have 0 decimal places
-ax.xaxis.set_major_formatter(FormatStrFormatter('% 1.0f')) 
+ax.xaxis.set_major_formatter(FormatStrFormatter('% 1.1f')) 
 
 # loop thorugh data parameters and plot points on plot (scatter)
 for data, color, mi, group in zip(data, colors, markers, groups):
     x, y = data
-    ax.scatter(x, y, alpha=0.8, c=color, marker=mi, s=80, label=group)
-    plt.legend(loc=2, fontsize=13)
+    ax.plot(x, y, alpha=0.8, c=color, marker=mi, linestyle='none', markersize=13, label=group)
+    plt.legend(loc=2, fontsize=23)
 
 # adjust font size of ticks
-ax.tick_params(axis='both', which='major', labelsize=14)
+ax.tick_params(axis='both', which='major', labelsize=23, pad=8)
 
 #plt.grid(which='major', axis='both', alpha=.1)
 # set limits to x and y axes
 plt.xlim(92,96)
 plt.ylim(.04,.35)
+# Toy MC Simulation disclaimer
+plt.text(.97,0.07,'Toy MC Simulation',horizontalalignment='right',
+     verticalalignment='top', transform = ax.transAxes, fontsize=18)
 # add x and y labels
-plt.xlabel("Efficiency (avg. over 10 epochs)", fontsize=17)
-plt.ylabel("False Positive Rate (avg. over 10 epochs)", fontsize=17)
+plt.xlabel("Efficiency (%)", fontsize=23, horizontalalignment='center',
+    verticalalignment='center', labelpad=20)
+plt.ylabel("False Positive Rate (per event)", fontsize=23, horizontalalignment='center',
+    verticalalignment='center', labelpad=20)
 plt.tight_layout()
 plt.show()

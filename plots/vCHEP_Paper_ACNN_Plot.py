@@ -65,8 +65,11 @@ for data, color, mi, group in zip(data, colors, markers, groups):
     ax.scatter(x, y, alpha=0.8, c=color, marker=mi, s=30, label=group)
     plt.legend(loc=2)
 
-plt.xlabel("Efficiency (avg. over 10 epochs)")
-plt.ylabel("False Positive Rate (avg. over 10 epochs)")
+# Toy MC Simulation disclaimer
+plt.text(0.1,0.5,'Toy MC Simulation',horizontalalignment='left',
+     verticalalignment='center', transform = ax.transAxes)
+plt.xlabel("Efficiency (%)")
+plt.ylabel("False Positive Rate (per event)")
 plt.title('Varied Loss Function Coefficient of AllCNN Models')
 plt.tight_layout()
 plt.show()
