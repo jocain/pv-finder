@@ -36,8 +36,8 @@ class UNet4SC(nn.Module):
 
     def forward(self, x):
         x1 = self.rcbn1(x)
-        x2 = self.d(self.rcbn2(x1))# 2000       
-        x3 = self.d(self.rcbn3(x2))# 1000
+        x2 = self.d(self.rcbn2(x1)) # 2000       
+        x3 = self.d(self.rcbn3(x2)) # 1000
         x4 = self.d(self.rcbn4(x3)) # 500
         x = self.d(self.rcbn5(x4)) # 250
 

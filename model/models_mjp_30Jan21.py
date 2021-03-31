@@ -1024,7 +1024,7 @@ class ACN_2_6L_RC1(nn.Module):
         self.conv4dropout = nn.Dropout(0.15)
         self.conv5dropout = nn.Dropout(0.15)
         
-        self.bn1 =  nn.BatchNorm1d(self.conv1.out_channels)
+        self.bn1 = nn.BatchNorm1d(self.conv1.out_channels)
         self.bn2 = nn.BatchNorm1d(self.conv2.out_channels)
         self.bn3 = nn.BatchNorm1d(self.conv3a.out_channels)
         self.bn4 = nn.BatchNorm1d(self.conv4.out_channels)
@@ -1567,8 +1567,7 @@ class ACN_1_8L_3S(nn.Module):
         x = torch.nn.Softplus()(x)
 
         return x
-                   
-                   
+                                    
 class ACN_2_8L_3S(nn.Module):
     '''
     This is used to pretrain the X feature set
@@ -2304,8 +2303,7 @@ class ACN_1_10L_4S(nn.Module):
         x = torch.nn.Softplus()(x)
 
         return x
-                   
-                   
+                                  
 class ACN_2_10L_4S_BN(nn.Module):
     '''
     This is used to pretrain the X feature set
@@ -2917,13 +2915,13 @@ class ACN_4_P_10L_4S_BN(nn.Module):
         ), "Kernel size should be odd for 'same' conv."
 
         # layer for concatenated two feature sets
-        self.largeConv = nn.Conv1d(
-            in_channels=self.finalFilter.out_channels+self.ppFinalFilter.out_channels,
-            out_channels=1,
-            kernel_size = 91, # this is a totally random guess and has no logical backing
-            stride=1, # might be worth trying 2
-            padding=(91 - 1) // 2,
-        )
+#        self.largeConv = nn.Conv1d(
+#            in_channels=self.finalFilter.out_channels+self.ppFinalFilter.out_channels,
+#            out_channels=1,
+#            kernel_size = 91, # this is a totally random guess and has no logical backing
+#            stride=1, # might be worth trying 2
+#            padding=(91 - 1) // 2,
+#        )
 
         assert (
             self.largeConv.kernel_size[0] % 2 == 1
@@ -3141,8 +3139,7 @@ class ACN_1_8L_DenseNet(nn.Module):
         x = torch.nn.Softplus()(x)
 
         return x
-                   
-                   
+            
 class ACN_2_8L_DenseNet_BN(nn.Module):
     '''
     This is used to pretrain the X feature set
