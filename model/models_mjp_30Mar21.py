@@ -325,7 +325,7 @@ class ACN_1i4_6L_BN(nn.Module):
         self.conv3 = Conv(10, 10)
         self.conv4 = Conv(10, 10)
         self.conv5 = Conv(10, 1, k_size=5, drop_rate=.35)
-        self.fc1 =  nn.Linear(in_features=4000 * self.conv5.OUTC, out_features=4000)
+        self.fc1 =  nn.Linear(in_features=4000 * 1, out_features=4000)
 
     def forward(self, x):
         x = self.conv1(x)
@@ -625,7 +625,7 @@ class ACN_3i4_P_6L_1S_BN_RC1(nn.Module):
         self.pConv1 = Conv(2, 20, k_size=25)
         self.pConv2 = Conv(20, 10)
         self.pConv3 = Conv(10, 1)
-        self.pFC1 = nn.Linear(in_features=4000 * self.pConv3.OUTC, out_features=4000)
+        self.pFC1 = nn.Linear(in_features=4000 * 1, out_features=4000)
 
     def forward(self, neuronValues):
 
@@ -735,7 +735,7 @@ class ACN_1i4_8L_3S_BN(nn.Module):
         self.conv5 = Conv(10+10, 10)
         self.conv6 = Conv(10, 10)
         self.conv7 = Conv(10+10, 1, k_size=5, drop_rate=.35)
-        self.fc1 =  nn.Linear(in_features=4000 * self.conv7.OUTC, out_features=4000)
+        self.fc1 =  nn.Linear(in_features=4000 * 1, out_features=4000)
 
     def forward(self, x):
         x1 = self.conv1(x)
@@ -913,7 +913,7 @@ class ACN_1i4_10L_4S_BN(nn.Module):
         self.conv7 = Conv(10+10, 7)
         self.conv8 = Conv(7, 5, k_size=9)
         self.conv9 = Conv(5+7, 1, k_size=5, drop_rate=.35)
-        self.fc1 =  nn.Linear(in_features=4000 * self.conv9.OUTC, out_features=4000)
+        self.fc1 =  nn.Linear(in_features=4000 * 1, out_features=4000)
 
     def forward(self, x):
         x1 = self.conv1(x)
@@ -1122,7 +1122,7 @@ class ACN_1i4_8L_DenseNet_BN(nn.Module):
         self.conv5 = Conv(10+10+10+20, 10)
         self.conv6 = Conv(10+10+10+10+20, 10)
         self.conv7 = Conv(10+10+10+10+10+20, 1, k_size=5, drop_rate=.35)
-        self.fc1 =  nn.Linear(in_features=4000 * self.conv7.OUTC, out_features=4000)
+        self.fc1 =  nn.Linear(in_features=4000 * 1, out_features=4000)
 
     def forward(self, x):
         x1 = self.conv1(x)
@@ -1195,7 +1195,7 @@ class ACN_3i4_8L_DenseNet_BN(nn.Module):
         self.pConv1 = Conv(2, 20, k_size=25)
         self.pConv2 = Conv(20, 10)
         self.pConv3 = Conv(10, 1)
-        self.pFC = nn.Linear(in_features=4000 * self.pConv3.OUTC, out_features=4000)
+        self.pFC = nn.Linear(in_features=4000 * 1, out_features=4000)
 
     def forward(self, neuronValues):
 
@@ -1319,10 +1319,10 @@ class ACN_1i4_10L_4S_BN_NI(nn.Module):
         self.conv5 = Conv(10+10+10+20, 10)
         self.conv6 = Conv(10+10+10+10+20, 10)
         self.conv7 = Conv(10+10+10+10+10+20, 1, k_size=5, drop_rate=.35)
-        self.fc1 =  nn.Linear(in_features=4000 * self.conv7.OUTC, out_features=4000)
+        self.fc1 =  nn.Linear(in_features=4000 * 1, out_features=4000)
 
     def forward(self, x):
-        
+
         x = nn.BatchNorm1d(x)
 
         x1 = self.conv1(x)
