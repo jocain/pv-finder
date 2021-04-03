@@ -96,11 +96,11 @@ class BM_ACN_1i4_6L(nn.Module):
         super(BM_ACN_1i4_6L, self).__init__()
 
         self.conv1 = Conv_No_BN(1, 20, k_size=25)
-        self.conv2 = Conv_No_BN(self.conv1.OUTC, 10)
-        self.conv3 = Conv_No_BN(self.conv2.OUTC, 10)
-        self.conv4 = Conv_No_BN(self.conv3.OUTC, 10)
-        self.conv5 = Conv_No_BN(self.conv4.OUTC, 1, k_size=5, drop_rate=.35)
-        self.fc1 =  nn.Linear(in_features=4000 * self.conv5.OUTC, out_features=4000)
+        self.conv2 = Conv_No_BN(20, 10)
+        self.conv3 = Conv_No_BN(10, 10)
+        self.conv4 = Conv_No_BN(10, 10)
+        self.conv5 = Conv_No_BN(10, 1, k_size=5, drop_rate=.35)
+        self.fc1 =  nn.Linear(in_features=4000 * 1, out_features=4000)
 
     def forward(self, x):
         x = self.conv1(x)
@@ -127,11 +127,11 @@ class BM_ACN_2i4_6L(nn.Module):
         super(BM_ACN_2i4_6L, self).__init__()
 
         self.conv1 = Conv_No_BN(1, 20, k_size=25)
-        self.conv2 = Conv_No_BN(self.conv1.OUTC, 10)
-        self.conv3 = Conv_No_BN(self.conv2.OUTC, 10)
-        self.conv4 = Conv_No_BN(self.conv3.OUTC, 10)
-        self.conv5 = Conv_No_BN(self.conv4.OUTC, 1, k_size=5)
-        self.conv6 = Conv_No_BN(self.conv5.OUTC, 1, k_size=91)
+        self.conv2 = Conv_No_BN(20, 10)
+        self.conv3 = Conv_No_BN(10, 10)
+        self.conv4 = Conv_No_BN(10, 10)
+        self.conv5 = Conv_No_BN(1, 1, k_size=5)
+        self.conv6 = Conv_No_BN(1, 1, k_size=91)
 
     def forward(self, x):
         x = self.conv1(x)
@@ -157,19 +157,19 @@ class BM_ACN_3i4_P_6L(nn.Module):
         super(BM_ACN_3i4_P_6L, self).__init__()
 
         self.conv1 = Conv_No_BN(1, 20, k_size=25)
-        self.conv2 = Conv_No_BN(self.conv1.OUTC, 10)
-        self.conv3 = Conv_No_BN(self.conv2.OUTC, 10)
-        self.conv4 = Conv_No_BN(self.conv3.OUTC, 10)
-        self.conv5 = Conv_No_BN(self.conv4.OUTC, 1, k_size=5)
-        self.conv6 = Conv_No_BN(self.conv5.OUTC, 1, k_size=91)
+        self.conv2 = Conv_No_BN(20, 10)
+        self.conv3 = Conv_No_BN(10, 10)
+        self.conv4 = Conv_No_BN(10, 10)
+        self.conv5 = Conv_No_BN(1, 1, k_size=5)
+        self.conv6 = Conv_No_BN(1, 1, k_size=91)
 
         # Perturbation layers
         # Notice how there are two less layers in "perturbative" 
         ## compared to "non-perturbative"
         self.pConv1 = Conv_No_BN(2, 20, k_size=25)
-        self.pConv2 = Conv_No_BN(self.pConv1.OUTC, 10)
-        self.pConv3 = Conv_No_BN(self.pConv2.OUTC, 1)
-        self.pFC1 = nn.Linear(in_features=4000 * self.pConv3.OUTC, out_features=4000)
+        self.pConv2 = Conv_No_BN(10, 10)
+        self.pConv3 = Conv_No_BN(10, 1)
+        self.pFC1 = nn.Linear(in_features=4000 * 1, out_features=4000)
 
     def forward(self, neuronValues):
 
@@ -211,21 +211,21 @@ class BM_ACN_4i4_P_6L_C(nn.Module):
         super(BM_ACN_4i4_P_6L_C, self).__init__()
 
         self.conv1 = Conv_No_BN(1, 20, k_size=25)
-        self.conv2 = Conv_No_BN(self.conv1.OUTC, 10)
-        self.conv3 = Conv_No_BN(self.conv2.OUTC, 10)
-        self.conv4 = Conv_No_BN(self.conv3.OUTC, 10)
-        self.conv5 = Conv_No_BN(self.conv4.OUTC, 1, k_size=5)
-        self.conv6 = Conv_No_BN(self.conv5.OUTC, 1, k_size=91)
+        self.conv2 = Conv_No_BN(20, 10)
+        self.conv3 = Conv_No_BN(10, 10)
+        self.conv4 = Conv_No_BN(10, 10)
+        self.conv5 = Conv_No_BN(1, 1, k_size=5)
+        self.conv6 = Conv_No_BN(1, 1, k_size=91)
 
-        ## Perturbation layers
-        ## Notice how there are two less layers in "perturbative" 
+        # Perturbation layers
+        # Notice how there are two less layers in "perturbative" 
         ## compared to "non-perturbative"
         self.pConv1 = Conv_No_BN(2, 20, k_size=25)
-        self.pConv2 = Conv_No_BN(self.pConv1.OUTC, 10)
-        self.pConv3 = Conv_No_BN(self.pConv2.OUTC, 1)
-        self.pConv4 = Conv_No_BN(self.pConv3.OUTC, 1, k_size=91)
+        self.pConv2 = Conv_No_BN(10, 10)
+        self.pConv3 = Conv_No_BN(10, 1)
+        self.pConv4 = Conv_No_BN(1, 1, k_size=91)
 
-        self.largeConv = Conv_No_BN(self.conv6.OUTC+self.pConv4.OUTC, 1, k_size=91)
+        self.largeConv = Conv_No_BN(2, 1, k_size=91)
 
     def forward(self, neuronValues):
 
@@ -268,19 +268,19 @@ class BM_ACN_4i4_P_6L(nn.Module):
     def __init__(self):
         super(BM_ACN_4i4_P_6L, self).__init__()
         self.conv1 = Conv_No_BN(1, 20, k_size=25)
-        self.conv2 = Conv_No_BN(self.conv1.OUTC, 10)
-        self.conv3 = Conv_No_BN(self.conv2.OUTC, 10)
-        self.conv4 = Conv_No_BN(self.conv3.OUTC, 10)
-        self.conv5 = Conv_No_BN(self.conv4.OUTC, 1, k_size=5)
-        self.conv6 = Conv_No_BN(self.conv5.OUTC, 1, k_size=91)
+        self.conv2 = Conv_No_BN(20, 10)
+        self.conv3 = Conv_No_BN(10, 10)
+        self.conv4 = Conv_No_BN(10, 10)
+        self.conv5 = Conv_No_BN(1, 1, k_size=5)
+        self.conv6 = Conv_No_BN(1, 1, k_size=91)
 
         # Perturbation layers
         # Notice how there are two less layers in "perturbative" 
         ## compared to "non-perturbative"
         self.pConv1 = Conv_No_BN(2, 20, k_size=25)
-        self.pConv2 = Conv_No_BN(self.pConv1.OUTC, 10)
-        self.pConv3 = Conv_No_BN(self.pConv2.OUTC, 1)
-        self.pConv4 = Conv_No_BN(self.pConv3.OUTC, 1, k_size=91)
+        self.pConv2 = Conv_No_BN(10, 10)
+        self.pConv3 = Conv_No_BN(10, 1)
+        self.pConv4 = Conv_No_BN(1, 1, k_size=91)
 
     def forward(self, neuronValues):
 
@@ -321,10 +321,10 @@ class ACN_1i4_6L_BN(nn.Module):
         super(ACN_1i4_6L_BN, self).__init__()
 
         self.conv1 = Conv(1, 20, k_size=25)
-        self.conv2 = Conv(self.conv1.OUTC, 10)
-        self.conv3 = Conv(self.conv2.OUTC, 10)
-        self.conv4 = Conv(self.conv3.OUTC, 10)
-        self.conv5 = Conv(self.conv4.OUTC, 1, k_size=5, drop_rate=.35)
+        self.conv2 = Conv(20, 10)
+        self.conv3 = Conv(10, 10)
+        self.conv4 = Conv(10, 10)
+        self.conv5 = Conv(10, 1, k_size=5, drop_rate=.35)
         self.fc1 =  nn.Linear(in_features=4000 * self.conv5.OUTC, out_features=4000)
 
     def forward(self, x):
@@ -352,11 +352,11 @@ class ACN_2i4_6L_BN(nn.Module):
         super(ACN_2i4_6L_BN, self).__init__()
 
         self.conv1 = Conv(1, 20, k_size=25)
-        self.conv2 = Conv(self.conv1.OUTC, 10)
-        self.conv3 = Conv(self.conv2.OUTC, 10)
-        self.conv4 = Conv(self.conv3.OUTC, 10)
-        self.conv5 = Conv(self.conv4.OUTC, 1, k_size=5)
-        self.conv6 = Conv(self.conv5.OUTC, 1, k_size=91)
+        self.conv2 = Conv(20, 10)
+        self.conv3 = Conv(10, 10)
+        self.conv4 = Conv(10, 10)
+        self.conv5 = Conv(1, 1, k_size=5)
+        self.conv6 = Conv(1, 1, k_size=91)
 
     def forward(self, x):
         x = self.conv1(x)
@@ -382,19 +382,19 @@ class ACN_3i4_P_6L_BN(nn.Module):
         super(ACN_3i4_P_6L_BN, self).__init__()
 
         self.conv1 = Conv(1, 20, k_size=25)
-        self.conv2 = Conv(self.conv1.OUTC, 10)
-        self.conv3 = Conv(self.conv2.OUTC, 10)
-        self.conv4 = Conv(self.conv3.OUTC, 10)
-        self.conv5 = Conv(self.conv4.OUTC, 1, k_size=5)
-        self.conv6 = Conv(self.conv5.OUTC, 1, k_size=91)
+        self.conv2 = Conv(20, 10)
+        self.conv3 = Conv(10, 10)
+        self.conv4 = Conv(10, 10)
+        self.conv5 = Conv(1, 1, k_size=5)
+        self.conv6 = Conv(1, 1, k_size=91)
 
         # Perturbation layers
         # Notice how there are two less layers in "perturbative" 
         ## compared to "non-perturbative"
         self.pConv1 = Conv(2, 20, k_size=25)
-        self.pConv2 = Conv(self.pConv1.OUTC, 10)
-        self.pConv3 = Conv(self.pConv2.OUTC, 1)
-        self.pFC1 = nn.Linear(in_features=4000 * self.pConv3.OUTC, out_features=4000)
+        self.pConv2 = Conv(10, 10)
+        self.pConv3 = Conv(10, 1)
+        self.pFC1 = nn.Linear(in_features=4000 * 1, out_features=4000)
 
     def forward(self, neuronValues):
 
@@ -436,21 +436,21 @@ class ACN_4i4_P_6L_BN_C(nn.Module):
         super(ACN_4i4_P_6L_BN_C, self).__init__()
 
         self.conv1 = Conv(1, 20, k_size=25)
-        self.conv2 = Conv(self.conv1.OUTC, 10)
-        self.conv3 = Conv(self.conv2.OUTC, 10)
-        self.conv4 = Conv(self.conv3.OUTC, 10)
-        self.conv5 = Conv(self.conv4.OUTC, 1, k_size=5)
-        self.conv6 = Conv(self.conv5.OUTC, 1, k_size=91)
+        self.conv2 = Conv(20, 10)
+        self.conv3 = Conv(10, 10)
+        self.conv4 = Conv(10, 10)
+        self.conv5 = Conv(1, 1, k_size=5)
+        self.conv6 = Conv(1, 1, k_size=91)
 
-        ## Perturbation layers
-        ## Notice how there are two less layers in "perturbative" 
+        # Perturbation layers
+        # Notice how there are two less layers in "perturbative" 
         ## compared to "non-perturbative"
         self.pConv1 = Conv(2, 20, k_size=25)
-        self.pConv2 = Conv(self.pConv1.OUTC, 10)
-        self.pConv3 = Conv(self.pConv2.OUTC, 1)
-        self.pConv4 = Conv(self.pConv3.OUTC, 1, k_size=91)
+        self.pConv2 = Conv(10, 10)
+        self.pConv3 = Conv(10, 1)
+        self.pConv4 = Conv(1, 1, k_size=91)
 
-        self.largeConv = Conv(self.conv6.OUTC+self.pConv4.OUTC, 1, k_size=91)
+        self.largeConv = Conv(2, 1, k_size=91)
 
     def forward(self, neuronValues):
 
@@ -492,20 +492,21 @@ class ACN_4i4_P_6L_BN_C(nn.Module):
 class BM_ACN_4i4_P_6L_BN(nn.Module):
     def __init__(self):
         super(BM_ACN_4i4_P_6L_BN, self).__init__()
+
         self.conv1 = Conv(1, 20, k_size=25)
-        self.conv2 = Conv(self.conv1.OUTC, 10)
-        self.conv3 = Conv(self.conv2.OUTC, 10)
-        self.conv4 = Conv(self.conv3.OUTC, 10)
-        self.conv5 = Conv(self.conv4.OUTC, 1, k_size=5)
-        self.conv6 = Conv(self.conv5.OUTC, 1, k_size=91)
+        self.conv2 = Conv(20, 10)
+        self.conv3 = Conv(10, 10)
+        self.conv4 = Conv(10, 10)
+        self.conv5 = Conv(1, 1, k_size=5)
+        self.conv6 = Conv(1, 1, k_size=91)
 
         # Perturbation layers
         # Notice how there are two less layers in "perturbative" 
         ## compared to "non-perturbative"
         self.pConv1 = Conv(2, 20, k_size=25)
-        self.pConv2 = Conv(self.pConv1.OUTC, 10)
-        self.pConv3 = Conv(self.pConv2.OUTC, 1)
-        self.pConv4 = Conv(self.pConv3.OUTC, 1, k_size=91)
+        self.pConv2 = Conv(10, 10)
+        self.pConv3 = Conv(10, 1)
+        self.pConv4 = Conv(1, 1, k_size=91)
 
     def forward(self, neuronValues):
 
@@ -548,14 +549,14 @@ NOTE: All attributes shared with benchmark are omitted
 class ACN_1i4_6L_BN_RC1(nn.Module):
     # creates model architecture
     def __init__(self):
-        super(ACN_1i4_6L_RC1, self).__init__()
+        super(ACN_1i4_6L_BN_RC1, self).__init__()
 
-        self.conv1 = Conv(1, 16, k_size=25)
-        self.conv2 = Conv(self.conv1.OUTC, 9)
-        self.conv3 = Conv(self.conv2.OUTC, 9)
-        self.conv4 = Conv(self.conv3.OUTC, 9)
-        self.conv5 = Conv(self.conv4.OUTC, 1, k_size=5, drop_rate=.35)
-        self.fc1 =  nn.Linear(in_features=4000 * self.conv5.OUTC, out_features=4000)
+        self.conv1 = Conv(1, 20, k_size=25)
+        self.conv2 = Conv(20, 9)
+        self.conv3 = Conv(9, 9)
+        self.conv4 = Conv(9, 9)
+        self.conv5 = Conv(9, 1, drop_rate=.35)
+        self.fc1 =  nn.Linear(in_features=4000 * 1, out_features=4000)
 
     def forward(self, x):
         x = self.conv1(x)
@@ -581,12 +582,12 @@ class ACN_2i4_6L_1S_BN_RC1(nn.Module):
     def __init__(self):
         super(ACN_2i4_6L_1S_BN_RC1, self).__init__()
 
-        self.conv1 = Conv(1, 16, k_size=25)
-        self.conv2 = Conv(self.conv1.OUTC, 9)
-        self.conv3 = Conv(self.conv2.OUTC+self.conv1.OUT, 9)
-        self.conv4 = Conv(self.conv3.OUTC, 9)
-        self.conv5 = Conv(self.conv4.OUTC, 1, k_size=5)
-        self.conv6 = Conv(self.conv5.OUTC, 1, k_size=91)
+        self.conv1 = Conv(1, 20, k_size=25)
+        self.conv2 = Conv(20, 9)
+        self.conv3 = Conv(9+20, 9)
+        self.conv4 = Conv(9, 9)
+        self.conv5 = Conv(9, 1)
+        self.conv6 = Conv(1, 1, k_size=91)
 
     def forward(self, x):
         x1 = self.conv1(x)
@@ -612,18 +613,18 @@ class ACN_3i4_P_6L_1S_BN_RC1(nn.Module):
         super(ACN_3i4_P_6L_1S_BN_RC1, self).__init__()
 
         self.conv1 = Conv(1, 20, k_size=25)
-        self.conv2 = Conv(self.conv1.OUTC, 10)
-        self.conv3 = Conv(self.conv2.OUTC+self.conv1.OUTC, 10)
-        self.conv4 = Conv(self.conv3.OUTC, 10)
-        self.conv5 = Conv(self.conv4.OUTC, 1, k_size=5)
-        self.conv6 = Conv(self.conv5.OUTC, 1, k_size=91)
+        self.conv2 = Conv(20, 9)
+        self.conv3 = Conv(9+20, 9)
+        self.conv4 = Conv(9, 9)
+        self.conv5 = Conv(9, 1)
+        self.conv6 = Conv(1, 1, k_size=91)
 
         # Perturbation layers
         # Notice how there are two less layers in "perturbative" 
         ## compared to "non-perturbative"
         self.pConv1 = Conv(2, 20, k_size=25)
-        self.pConv2 = Conv(self.pConv1.OUTC, 10)
-        self.pConv3 = Conv(self.pConv2.OUTC, 1)
+        self.pConv2 = Conv(20, 10)
+        self.pConv3 = Conv(10, 1)
         self.pFC1 = nn.Linear(in_features=4000 * self.pConv3.OUTC, out_features=4000)
 
     def forward(self, neuronValues):
@@ -665,20 +666,21 @@ class ACN_4i4_P_6L_1S_BN_RC1(nn.Module):
     ## This is the perturbative model
     def __init__(self):
         super(BM_ACN_4i4_P_6L_BN, self).__init__()
-        self.conv1 = Conv(1, 16, k_size=25)
-        self.conv2 = Conv(self.conv1.OUTC, 9)
-        self.conv3 = Conv(self.conv2.OUTC+self.conv1.OUTC, 9)
-        self.conv4 = Conv(self.conv3.OUTC, 9)
-        self.conv5 = Conv(self.conv4.OUTC, 1, k_size=5)
-        self.conv6 = Conv(self.conv5.OUTC, 1, k_size=91)
+
+        self.conv1 = Conv(1, 20, k_size=25)
+        self.conv2 = Conv(20, 9)
+        self.conv3 = Conv(9+20, 9)
+        self.conv4 = Conv(9, 9)
+        self.conv5 = Conv(9, 1)
+        self.conv6 = Conv(1, 1, k_size=91)
 
         # Perturbation layers
         # Notice how there are two less layers in "perturbative" 
         ## compared to "non-perturbative"
         self.pConv1 = Conv(2, 20, k_size=25)
-        self.pConv2 = Conv(self.pConv1.OUTC, 10)
-        self.pConv3 = Conv(self.pConv2.OUTC, 1)
-        self.pConv4 = Conv(self.pConv3.OUTC, 1, k_size=91)
+        self.pConv2 = Conv(20, 10)
+        self.pConv3 = Conv(10, 1)
+        self.pConv4 = Conv(1, 1, k_size=91)
 
     def forward(self, neuronValues):
 
@@ -727,12 +729,12 @@ class ACN_1i4_8L_3S_BN(nn.Module):
         super(ACN_1i4_8L_3S_BN, self).__init__()
 
         self.conv1 = Conv(1, 20, k_size=25)
-        self.conv2 = Conv(self.conv1.OUTC, 10)
-        self.conv3 = Conv(self.conv2.OUTC+self.conv1.OUTC, 10)
-        self.conv4 = Conv(self.conv3.OUTC, 10)
-        self.conv5 = Conv(self.conv4.OUTC+self.conv3.OUTC, 10)
-        self.conv6 = Conv(self.conv5.OUTC, 10)
-        self.conv7 = Conv(self.conv6.OUTC+self.conv5.OUTC, 1, k_size=5, drop_rate=.35)
+        self.conv2 = Conv(20, 10)
+        self.conv3 = Conv(10+20, 10)
+        self.conv4 = Conv(10, 10)
+        self.conv5 = Conv(10+10, 10)
+        self.conv6 = Conv(10, 10)
+        self.conv7 = Conv(10+10, 1, k_size=5, drop_rate=.35)
         self.fc1 =  nn.Linear(in_features=4000 * self.conv7.OUTC, out_features=4000)
 
     def forward(self, x):
@@ -763,13 +765,13 @@ class ACN_2i4_8L_3S_BN(nn.Module):
         super(ACN_2i4_8L_3S_BN, self).__init__()
 
         self.conv1 = Conv(1, 20, k_size=25)
-        self.conv2 = Conv(self.conv1.OUTC, 10)
-        self.conv3 = Conv(self.conv2.OUTC+self.conv1.OUTC, 10)
-        self.conv4 = Conv(self.conv3.OUTC, 10)
-        self.conv5 = Conv(self.conv4.OUTC+self.conv3.OUTC, 10)
-        self.conv6 = Conv(self.conv5.OUTC, 10)
-        self.conv7 = Conv(self.conv6.OUTC+self.conv5.OUTC, 1, k_size=5)
-        self.conv8 = Conv(self.conv7.OUTC, 1, k_size=91)
+        self.conv2 = Conv(20, 10)
+        self.conv3 = Conv(10+20, 10)
+        self.conv4 = Conv(10, 10)
+        self.conv5 = Conv(10+10, 10)
+        self.conv6 = Conv(10, 10)
+        self.conv7 = Conv(10+10, 1, k_size=5)
+        self.conv8 = Conv(1, 1, k_size=91)
 
     def forward(self, x):
         x1 = self.conv1(x)
@@ -798,18 +800,18 @@ class ACN_3i4_P_8L_3S_BN(nn.Module):
         super(ACN_3i4_P_8L_3S_BN, self).__init__()
 
         self.conv1 = Conv(1, 20, k_size=25)
-        self.conv2 = Conv(self.conv1.OUTC, 10)
-        self.conv3 = Conv(self.conv2.OUTC+self.conv1.OUTC, 10)
-        self.conv4 = Conv(self.conv3.OUTC, 10)
-        self.conv5 = Conv(self.conv4.OUTC+self.conv3.OUTC, 10)
-        self.conv6 = Conv(self.conv5.OUTC, 10)
-        self.conv7 = Conv(self.conv6.OUTC+self.conv5.OUTC, 1, k_size=5)
-        self.conv8 = Conv(self.conv7.OUTC, 1, k_size=91)
+        self.conv2 = Conv(20, 10)
+        self.conv3 = Conv(10+20, 10)
+        self.conv4 = Conv(10, 10)
+        self.conv5 = Conv(10+10, 10)
+        self.conv6 = Conv(10, 10)
+        self.conv7 = Conv(10+10, 1, k_size=5)
+        self.conv8 = Conv(1, 1, k_size=91)
 
         self.pConv1 = Conv(2, 20, k_size=25)
-        self.pConv2 = Conv(self.pConv1.OUTC, 10)
-        self.pConv3 = Conv(self.pConv2.OUTC, 1)
-        self.pFC = nn.Linear(in_features=4000 * self.pConv3.OUTC, out_features=4000)
+        self.pConv2 = Conv(20, 10)
+        self.pConv3 = Conv(10, 1)
+        self.pFC = nn.Linear(in_features=4000 * 1, out_features=4000)
 
     def forward(self, x):
         x01 = self.conv1(x)
@@ -844,18 +846,18 @@ class ACN_4i4_P_8L_3S_BN(nn.Module):
         super(ACN_4i4_P_8L_3S_BN, self).__init__()
 
         self.conv1 = Conv(1, 20, k_size=25)
-        self.conv2 = Conv(self.conv1.OUTC, 10)
-        self.conv3 = Conv(self.conv2.OUTC+self.conv1.OUTC, 10)
-        self.conv4 = Conv(self.conv3.OUTC, 10)
-        self.conv5 = Conv(self.conv4.OUTC+self.conv3.OUTC, 10)
-        self.conv6 = Conv(self.conv5.OUTC, 10)
-        self.conv7 = Conv(self.conv6.OUTC+self.conv5.OUTC, 1, k_size=5)
-        self.conv8 = Conv(self.conv7.OUTC, 1, k_size=91)
+        self.conv2 = Conv(20, 10)
+        self.conv3 = Conv(10+20, 10)
+        self.conv4 = Conv(10, 10)
+        self.conv5 = Conv(10+10, 10)
+        self.conv6 = Conv(10, 10)
+        self.conv7 = Conv(10+10, 1, k_size=5)
+        self.conv8 = Conv(1, 1, k_size=91)
 
         self.pConv1 = Conv(2, 20, k_size=25)
-        self.pConv2 = Conv(self.pConv1.OUTC, 10)
-        self.pConv3 = Conv(self.pConv2.OUTC, 1)
-        self.pConv4 = Conv(self.pConv3.OUTC, 1, k_size=91)
+        self.pConv2 = Conv(20, 10)
+        self.pConv3 = Conv(10, 1)
+        self.pConv4 = Conv(1, 1, k_size=91)
 
     def forward(self, x):
         x01 = self.conv1(x)
@@ -903,14 +905,14 @@ class ACN_1i4_10L_4S_BN(nn.Module):
         super(ACN_1i4_10L_4S_BN, self).__init__()
 
         self.conv1 = Conv(1, 20, k_size=25)
-        self.conv2 = Conv(self.conv1.OUTC, 10)
-        self.conv3 = Conv(self.conv2.OUTC+self.conv1.OUTC, 10)
-        self.conv4 = Conv(self.conv3.OUTC, 10)
-        self.conv5 = Conv(self.conv4.OUTC+self.conv3.OUTC, 10)
-        self.conv6 = Conv(self.conv5.OUTC, 10)
-        self.conv7 = Conv(self.conv6.OUTC+self.conv5.OUTC, 7, k_size=11)
-        self.conv8 = Conv(self.conv7.OUTC, 3, k_size=5)
-        self.conv9 = Conv(self.conv8.OUTC+self.conv7.OUTC, 1, k_size=5, drop_rate=.35)
+        self.conv2 = Conv(20, 10)
+        self.conv3 = Conv(10+20, 10)
+        self.conv4 = Conv(10, 10)
+        self.conv5 = Conv(10+10, 10)
+        self.conv6 = Conv(10, 10)
+        self.conv7 = Conv(10+10, 7)
+        self.conv8 = Conv(7, 5, k_size=9)
+        self.conv9 = Conv(5+7, 1, k_size=5, drop_rate=.35)
         self.fc1 =  nn.Linear(in_features=4000 * self.conv9.OUTC, out_features=4000)
 
     def forward(self, x):
@@ -941,15 +943,15 @@ class ACN_2i4_10L_4S_BN(nn.Module):
         super(ACN_2i4_10L_4S_BN, self).__init__()
 
         self.conv1 = Conv(1, 20, k_size=25)
-        self.conv2 = Conv(self.conv1.OUTC, 10)
-        self.conv3 = Conv(self.conv2.OUTC+self.conv1.OUTC, 10)
-        self.conv4 = Conv(self.conv3.OUTC, 10)
-        self.conv5 = Conv(self.conv4.OUTC+self.conv3.OUTC, 10)
-        self.conv6 = Conv(self.conv5.OUTC, 10)
-        self.conv7 = Conv(self.conv6.OUTC+self.conv5.OUTC, 7, k_size=11)
-        self.conv8 = Conv(self.conv7.OUTC, 3, k_size=5)
-        self.conv9 = Conv(self.conv8.OUTC+self.conv7.OUTC, 1, k_size=5)
-        self.conv10 = Conv(self.conv9.OUTC, 1, k_size=91)
+        self.conv2 = Conv(20, 10)
+        self.conv3 = Conv(10+20, 10)
+        self.conv4 = Conv(10, 10)
+        self.conv5 = Conv(10+10, 10)
+        self.conv6 = Conv(10, 10)
+        self.conv7 = Conv(10+10, 7)
+        self.conv8 = Conv(7, 5, k_size=9)
+        self.conv9 = Conv(5+7, 1, k_size=5)
+        self.conv10 = Conv(1, 1, k_size=91)
 
     def forward(self, x):
         x1 = self.conv1(x)
@@ -979,20 +981,20 @@ class ACN_3i4_P_10L_4S_BN(nn.Module):
         super(ACN_3i4_P_10L_4S_BN, self).__init__()
 
         self.conv1 = Conv(1, 20, k_size=25)
-        self.conv2 = Conv(self.conv1.OUTC, 10)
-        self.conv3 = Conv(self.conv2.OUTC+self.conv1.OUTC, 10)
-        self.conv4 = Conv(self.conv3.OUTC, 10)
-        self.conv5 = Conv(self.conv4.OUTC+self.conv3.OUTC, 10)
-        self.conv6 = Conv(self.conv5.OUTC, 10)
-        self.conv7 = Conv(self.conv6.OUTC+self.conv5.OUTC, 7, k_size=11)
-        self.conv8 = Conv(self.conv7.OUTC, 3, k_size=5)
-        self.conv9 = Conv(self.conv8.OUTC+self.conv7.OUTC, 1, k_size=5)
-        self.conv10 = Conv(self.conv9.OUTC, 1, k_size=91)
+        self.conv2 = Conv(20, 10)
+        self.conv3 = Conv(10+20, 10)
+        self.conv4 = Conv(10, 10)
+        self.conv5 = Conv(10+10, 10)
+        self.conv6 = Conv(10, 10)
+        self.conv7 = Conv(10+10, 7)
+        self.conv8 = Conv(7, 5, k_size=9)
+        self.conv9 = Conv(5+7, 1, k_size=5)
+        self.conv10 = Conv(1, 1, k_size=91)
 
         self.pConv1 = Conv(2, 20, k_size=25)
-        self.pConv2 = Conv(self.pConv1.OUTC, 10)
-        self.pConv3 = Conv(self.pConv2.OUTC, 1)
-        self.pFC = nn.Linear(in_features=4000 * self.pConv3.OUTC, out_features=4000)
+        self.pConv2 = Conv(20, 10)
+        self.pConv3 = Conv(10, 1)
+        self.pFC = nn.Linear(in_features=4000 * 1, out_features=4000)
 
     def forward(self, neuronValues):
         
@@ -1040,20 +1042,20 @@ class ACN_4i4_P_10L_4S_BN(nn.Module):
         super(ACN_4i4_P_10L_4S_BN, self).__init__()
 
         self.conv1 = Conv(1, 20, k_size=25)
-        self.conv2 = Conv(self.conv1.OUTC, 10)
-        self.conv3 = Conv(self.conv2.OUTC+self.conv1.OUTC, 10)
-        self.conv4 = Conv(self.conv3.OUTC, 10)
-        self.conv5 = Conv(self.conv4.OUTC+self.conv3.OUTC, 10)
-        self.conv6 = Conv(self.conv5.OUTC, 10)
-        self.conv7 = Conv(self.conv6.OUTC+self.conv5.OUTC, 7, k_size=11)
-        self.conv8 = Conv(self.conv7.OUTC, 3, k_size=5)
-        self.conv9 = Conv(self.conv8.OUTC+self.conv7.OUTC, 1, k_size=5)
-        self.conv10 = Conv(self.conv9.OUTC, 1, k_size=91)
+        self.conv2 = Conv(20, 10)
+        self.conv3 = Conv(10+20, 10)
+        self.conv4 = Conv(10, 10)
+        self.conv5 = Conv(10+10, 10)
+        self.conv6 = Conv(10, 10)
+        self.conv7 = Conv(10+10, 7)
+        self.conv8 = Conv(7, 5, k_size=9)
+        self.conv9 = Conv(5+7, 1, k_size=5)
+        self.conv10 = Conv(1, 1, k_size=91)
 
         self.pConv1 = Conv(2, 20, k_size=25)
-        self.pConv2 = Conv(self.pConv1.OUTC, 10)
-        self.pConv3 = Conv(self.pConv2.OUTC, 1)
-        self.pConv4 = Conv(self.pConv3.OUTC, 1, k_size=91)
+        self.pConv2 = Conv(20, 10)
+        self.pConv3 = Conv(10, 1)
+        self.pConv4 = Conv(1, 1, k_size=91)
 
     def forward(self, neuronValues):
         
@@ -1114,12 +1116,12 @@ class ACN_1i4_8L_DenseNet_BN(nn.Module):
         super(ACN_1i4_8L_DenseNet_BN, self).__init__()
 
         self.conv1 = Conv(1, 20, k_size=25)
-        self.conv2 = Conv(self.conv1.OUTC, 10)
-        self.conv3 = Conv(self.conv2.OUTC+self.conv1.OUTC, 10)
-        self.conv4 = Conv(self.conv3.OUTC+self.conv2.OUTC+self.conv1.OUTC, 10)
-        self.conv5 = Conv(self.conv4.OUTC+self.conv3.OUTC+self.conv2.OUTC+self.conv1.OUTC, 10)
-        self.conv6 = Conv(self.conv5.OUTC+self.conv4.OUTC+self.conv3.OUTC+self.conv2.OUTC+self.conv1.OUTC, 10)
-        self.conv7 = Conv(self.conv6.OUTC+self.conv5.OUTC+self.conv4.OUTC+self.conv3.OUTC+self.conv2.OUTC+self.conv1.OUTC, 1, k_size=5, drop_rate=.35)
+        self.conv2 = Conv(20, 10)
+        self.conv3 = Conv(10+20, 10)
+        self.conv4 = Conv(10+10+20, 10)
+        self.conv5 = Conv(10+10+10+20, 10)
+        self.conv6 = Conv(10+10+10+10+20, 10)
+        self.conv7 = Conv(10+10+10+10+10+20, 1, k_size=5, drop_rate=.35)
         self.fc1 =  nn.Linear(in_features=4000 * self.conv7.OUTC, out_features=4000)
 
     def forward(self, x):
@@ -1148,13 +1150,13 @@ class ACN_2i4_8L_DenseNet_BN(nn.Module):
         super(ACN_2i4_8L_DenseNet_BN, self).__init__()
 
         self.conv1 = Conv(1, 20, k_size=25)
-        self.conv2 = Conv(self.conv1.OUTC, 10)
-        self.conv3 = Conv(self.conv2.OUTC+self.conv1.OUTC, 10)
-        self.conv4 = Conv(self.conv3.OUTC+self.conv2.OUTC+self.conv1.OUTC, 10)
-        self.conv5 = Conv(self.conv4.OUTC+self.conv3.OUTC+self.conv2.OUTC+self.conv1.OUTC, 10)
-        self.conv6 = Conv(self.conv5.OUTC+self.conv4.OUTC+self.conv3.OUTC+self.conv2.OUTC+self.conv1.OUTC, 10)
-        self.conv7 = Conv(self.conv6.OUTC+self.conv5.OUTC+self.conv4.OUTC+self.conv3.OUTC+self.conv2.OUTC+self.conv1.OUTC, 1, k_size=5)
-        self.conv8 = Conv(self.conv7.OUTC+self.conv6.OUTC+self.conv5.OUTC+self.conv4.OUTC+self.conv3.OUTC+self.conv2.OUTC+self.conv1.OUTC, 1, k_size=91)
+        self.conv2 = Conv(20, 10)
+        self.conv3 = Conv(10+20, 10)
+        self.conv4 = Conv(10+10+20, 10)
+        self.conv5 = Conv(10+10+10+20, 10)
+        self.conv6 = Conv(10+10+10+10+20, 10)
+        self.conv7 = Conv(10+10+10+10+10+20, 1, k_size=5)
+        self.conv8 = Conv(1+10+10+10+10+10+20, 1, k_size=91)
 
     def forward(self, x):
         x1 = self.conv1(x)
@@ -1182,17 +1184,17 @@ class ACN_3i4_8L_DenseNet_BN(nn.Module):
         super(ACN_3i4_8L_DenseNet_BN, self).__init__()
 
         self.conv1 = Conv(1, 20, k_size=25)
-        self.conv2 = Conv(self.conv1.OUTC, 10)
-        self.conv3 = Conv(self.conv2.OUTC+self.conv1.OUTC, 10)
-        self.conv4 = Conv(self.conv3.OUTC+self.conv2.OUTC+self.conv1.OUTC, 10)
-        self.conv5 = Conv(self.conv4.OUTC+self.conv3.OUTC+self.conv2.OUTC+self.conv1.OUTC, 10)
-        self.conv6 = Conv(self.conv5.OUTC+self.conv4.OUTC+self.conv3.OUTC+self.conv2.OUTC+self.conv1.OUTC, 10)
-        self.conv7 = Conv(self.conv6.OUTC+self.conv5.OUTC+self.conv4.OUTC+self.conv3.OUTC+self.conv2.OUTC+self.conv1.OUTC, 1, k_size=5)
-        self.conv8 = Conv(self.conv7.OUTC+self.conv6.OUTC+self.conv5.OUTC+self.conv4.OUTC+self.conv3.OUTC+self.conv2.OUTC+self.conv1.OUTC, 1, k_size=91)
+        self.conv2 = Conv(20, 10)
+        self.conv3 = Conv(10+20, 10)
+        self.conv4 = Conv(10+10+20, 10)
+        self.conv5 = Conv(10+10+10+20, 10)
+        self.conv6 = Conv(10+10+10+10+20, 10)
+        self.conv7 = Conv(10+10+10+10+10+20, 1, k_size=5)
+        self.conv8 = Conv(1+10+10+10+10+10+20, 1, k_size=91)
 
         self.pConv1 = Conv(2, 20, k_size=25)
-        self.pConv2 = Conv(self.pConv1.OUTC, 10)
-        self.pConv3 = Conv(self.pConv2.OUTC, 1)
+        self.pConv2 = Conv(20, 10)
+        self.pConv3 = Conv(10, 1)
         self.pFC = nn.Linear(in_features=4000 * self.pConv3.OUTC, out_features=4000)
 
     def forward(self, neuronValues):
@@ -1234,23 +1236,23 @@ class ACN_3i4_8L_DenseNet_BN(nn.Module):
 
         return x
 
-class ACN_4_8L_DenseNet_BN(nn.Module):
+class ACN_4i4_8L_DenseNet_BN(nn.Module):
     def __init__(self):
-        super(ACN_4_8L_DenseNet_BN, self).__init__()
+        super(ACN_4i4_8L_DenseNet_BN, self).__init__()
 
         self.conv1 = Conv(1, 20, k_size=25)
-        self.conv2 = Conv(self.conv1.OUTC, 10)
-        self.conv3 = Conv(self.conv2.OUTC+self.conv1.OUTC, 10)
-        self.conv4 = Conv(self.conv3.OUTC+self.conv2.OUTC+self.conv1.OUTC, 10)
-        self.conv5 = Conv(self.conv4.OUTC+self.conv3.OUTC+self.conv2.OUTC+self.conv1.OUTC, 10)
-        self.conv6 = Conv(self.conv5.OUTC+self.conv4.OUTC+self.conv3.OUTC+self.conv2.OUTC+self.conv1.OUTC, 10)
-        self.conv7 = Conv(self.conv6.OUTC+self.conv5.OUTC+self.conv4.OUTC+self.conv3.OUTC+self.conv2.OUTC+self.conv1.OUTC, 1, k_size=5)
-        self.conv8 = Conv(self.conv7.OUTC+self.conv6.OUTC+self.conv5.OUTC+self.conv4.OUTC+self.conv3.OUTC+self.conv2.OUTC+self.conv1.OUTC, 1, k_size=91)
+        self.conv2 = Conv(20, 10)
+        self.conv3 = Conv(10+20, 10)
+        self.conv4 = Conv(10+10+20, 10)
+        self.conv5 = Conv(10+10+10+20, 10)
+        self.conv6 = Conv(10+10+10+10+20, 10)
+        self.conv7 = Conv(10+10+10+10+10+20, 1, k_size=5)
+        self.conv8 = Conv(1+10+10+10+10+10+20, 1, k_size=91)
 
         self.pConv1 = Conv(2, 20, k_size=25)
-        self.pConv2 = Conv(self.pConv1.OUTC, 10)
-        self.pConv3 = Conv(self.pConv2.OUTC, 1)
-        self.pConv4 = Conv(self.pConv3.OUTC, 1, k_size=91)
+        self.pConv2 = Conv(20, 10)
+        self.pConv3 = Conv(10, 1)
+        self.pConv4 = Conv(1, 1, k_size=91)
 
     def forward(self, neuronValues):
 
@@ -1290,3 +1292,215 @@ class ACN_4_8L_DenseNet_BN(nn.Module):
         x = torch.nn.Softplus()(x)
 
         return x
+
+    
+    '''
+
+Modified network architecture of benchmark with the following attributes:
+NOTE: All attributes shared with benchmark are omitted
+1. Batch Normalization in each layer
+2. Three feature set using X, x, y.
+3. 10 layer convolutional architecture for X feature set.
+4. 4 layer conovlutional architecture for x and y feature set.
+5. Takes element-wise product of the two feature sets for final layer.
+6. Channel count follows the format:    01-20-10-10-10-10-07-05-01-01 (X), 20-10-10-01 (x, y),  20-01 (X, x, y)
+7. Kernel size follows the format:      25-15-15-15-15-15-09-05-91 (X),    25-15-15-91 (x, y),  25-91 (X, x, y)
+8. 4 skip connections, located at layers 3,5,7,9
+9. Batch Normalization used on input
+'''
+class ACN_1i4_10L_4S_BN_NI(nn.Module):
+    def __init__(self):
+        super(ACN_1i4_10L_4S_BN_NI, self).__init__()
+
+        self.conv1 = Conv(1, 20, k_size=25)
+        self.conv2 = Conv(20, 10)
+        self.conv3 = Conv(10+20, 10)
+        self.conv4 = Conv(10+10+20, 10)
+        self.conv5 = Conv(10+10+10+20, 10)
+        self.conv6 = Conv(10+10+10+10+20, 10)
+        self.conv7 = Conv(10+10+10+10+10+20, 1, k_size=5, drop_rate=.35)
+        self.fc1 =  nn.Linear(in_features=4000 * self.conv7.OUTC, out_features=4000)
+
+    def forward(self, x):
+        
+        x = nn.BatchNorm1d(x)
+
+        x1 = self.conv1(x)
+        x2 = self.conv2(x1)
+        x3 = self.conv3(torch.cat([x1, x2], 1))
+        x4 = self.conv4(torch.cat([x1,x2,x3], 1))
+        x5 = self.conv5(torch.cat([x1,x2,x3,x4], 1))
+        x6 = self.conv6(torch.cat([x1,x2,x3,x4,x5], 1))
+        x7 = self.conv7(torch.cat([x1,x2,x3,x4,x5,x6], 1))
+        ## Remove empty middle shape diminsion
+        ## reshape conv6 output to work as output 
+        ## to the softplus activation
+        x = x7.view(x7.shape[0], x7.shape[-1])
+        x = self.fc1(x)
+
+        x = torch.nn.Softplus()(x)
+
+        return x
+                                   
+class ACN_2i4_10L_4S_BN_NI(nn.Module):
+    '''
+    This is used to pretrain the X feature set
+    '''
+    def __init__(self):
+        super(ACN_2i4_10L_4S_BN_NI, self).__init__()
+
+        self.conv1 = Conv(1, 20, k_size=25)
+        self.conv2 = Conv(20, 10)
+        self.conv3 = Conv(10+20, 10)
+        self.conv4 = Conv(10+10+20, 10)
+        self.conv5 = Conv(10+10+10+20, 10)
+        self.conv6 = Conv(10+10+10+10+20, 10)
+        self.conv7 = Conv(10+10+10+10+10+20, 1, k_size=5)
+        self.conv8 = Conv(1+10+10+10+10+10+20, 1, k_size=91)
+
+    def forward(self, x):
+
+        x = nn.BatchNorm1d(x)
+
+        x1 = self.conv1(x)
+        x2 = self.conv2(x1)
+        x3 = self.conv3(torch.cat([x1, x2], 1))
+        x4 = self.conv4(torch.cat([x1,x2,x3], 1))
+        x5 = self.conv5(torch.cat([x1,x2,x3,x4], 1))
+        x6 = self.conv6(torch.cat([x1,x2,x3,x4,x5], 1))
+        x7 = self.conv7(torch.cat([x1,x2,x3,x4,x5,x6], 1))
+        x8 = self.conv8(torch.cat([x1,x2,x3,x4,x5,x6,x7],1))
+        ## Remove empty middle shape diminsion
+        ## reshape conv6 output to work as output 
+        ## to the softplus activation
+        x = x7.view(x7.shape[0], x7.shape[-1])
+
+        x = torch.nn.Softplus()(x)
+
+        return x
+
+class ACN_3i4_P_10L_4S_BN_NI(nn.Module):
+    '''
+    This is used to pretrain the (x,y) feature set
+    '''
+    def __init__(self):
+        super(ACN_3i4_P_10L_4S_BN_NI, self).__init__()
+
+        self.conv1 = Conv(1, 20, k_size=25)
+        self.conv2 = Conv(20, 10)
+        self.conv3 = Conv(10+20, 10)
+        self.conv4 = Conv(10+10+20, 10)
+        self.conv5 = Conv(10+10+10+20, 10)
+        self.conv6 = Conv(10+10+10+10+20, 10)
+        self.conv7 = Conv(10+10+10+10+10+20, 1, k_size=5)
+        self.conv8 = Conv(1+10+10+10+10+10+20, 1, k_size=91)
+
+        self.pConv1 = Conv(2, 20, k_size=25)
+        self.pConv2 = Conv(20, 10)
+        self.pConv3 = Conv(10, 1)
+        self.pFC = nn.Linear(in_features=4000 * self.pConv3.OUTC, out_features=4000)
+
+    def forward(self, neuronValues):
+
+        ## in the method definition, neuronValues corresponds to (X,x,y)
+        ## here, we will use the name x0 to denote the (X) feature set and
+        ## the name x1 to denote the (x,y) feature set
+        x0 = neuronValues[:, 0:1, :]  ## picks out the 0 feature set, X
+        x1 = neuronValues[:, 2:4, :]  ## picks out the 2 & 3 feature sets, x & y
+
+        x0 = nn.BatchNorm1d(x0)
+
+        x01 = self.conv1(x0)
+        x2 = self.conv2(x01)
+        x3 = self.conv3(torch.cat([x01, x2], 1))
+        x4 = self.conv4(torch.cat([x01,x2,x3], 1))
+        x5 = self.conv5(torch.cat([x01,x2,x3,x4], 1))
+        x6 = self.conv6(torch.cat([x01,x2,x3,x4,x5], 1))
+        x7 = self.conv7(torch.cat([x01,x2,x3,x4,x5,x6], 1))
+        x8 = self.conv8(torch.cat([x01,x2,x3,x4,x5,x6,x7],1))
+        ## Remove empty middle shape diminsion
+        ## reshape conv6 output to work as output 
+        ## to the softplus activation
+        x0 = x7.view(x7.shape[0], x7.shape[-1])
+
+        x1 = self.pConv1(x1)
+        x1 = self.pConv2(x1)
+        x1 = self.pConv3(x1)
+        ## Remove empty middle shape diminsion
+        ## reshape conv6 output to work as output 
+        ## to the softplus activation
+        x1 = x1.view(x1.shape[0], x1.shape[-1])
+        x1 = self.pFC(x1)
+
+        neuronValues = torch.nn.Softplus()(x0 * x1)
+        neuronValues = neuronValues.squeeze()
+
+        return neuronValues
+
+        x = torch.nn.Softplus()(x)
+
+        return x
+
+class ACN_4i4_P_10L_4S_BN_NI(nn.Module):
+    def __init__(self):
+        super(ACN_4i4_P_10L_4S_BN_NI, self).__init__()
+
+        self.conv1 = Conv(1, 20, k_size=25)
+        self.conv2 = Conv(20, 10)
+        self.conv3 = Conv(10+20, 10)
+        self.conv4 = Conv(10, 10)
+        self.conv5 = Conv(10+10, 10)
+        self.conv6 = Conv(10, 10)
+        self.conv7 = Conv(10+10, 7)
+        self.conv8 = Conv(7, 5, k_size=9)
+        self.conv9 = Conv(5+7, 1, k_size=5)
+        self.conv10 = Conv(1, 1, k_size=91)
+
+        self.pConv1 = Conv(2, 20, k_size=25)
+        self.pConv2 = Conv(20, 10)
+        self.pConv3 = Conv(10, 1)
+        self.pConv4 = Conv(1, 1, k_size=91)
+
+    def forward(self, neuronValues):
+        
+        ## in the method definition, neuronValues corresponds to (X,x,y)
+        ## here, we will use the name x0 to denote the (X) feature set and
+        ## the name x1 to denote the (x,y) feature set
+        x0 = neuronValues[:, 0:1, :]  ## picks out the 0 feature set, X
+        x1 = neuronValues[:, 2:4, :]  ## picks out the 2 & 3 feature sets, x & y
+
+        x0 = nn.BatchNorm1d(x0)
+
+        x01 = self.conv1(x0)
+        x2 = self.conv2(x01)
+        x3 = self.conv3(torch.cat([x2, x01], 1))
+        x4 = self.conv4(x3)
+        x5 = self.conv5(torch.cat([x4, x3], 1))
+        x6 = self.conv6(x5)
+        x7 = self.conv7(torch.cat([x6, x5], 1))
+        x8 = self.conv8(x7)
+        x9 = self.conv9(torch.cat([x8, x7], 1))
+        x10 = self.conv10(x9)
+        ## Remove empty middle shape diminsion
+        ## reshape conv6 output to work as output 
+        ## to the softplus activation
+        x0 = x10.view(x10.shape[0], x10.shape[-1])
+
+        x1 = self.pConv1(x1)
+        x1 = self.pConv2(x1)
+        x1 = self.pConv3(x1)
+        x1 = self.pConv4(x1)
+        ## Remove empty middle shape diminsion
+        ## reshape conv6 output to work as output 
+        ## to the softplus activation
+        x1 = x1.view(x1.shape[0], x1.shape[-1])
+
+        neuronValues = torch.nn.Softplus()(x0 * x1)
+        neuronValues = neuronValues.squeeze()
+
+        return neuronValues
+
+        x = torch.nn.Softplus()(x)
+
+        return x
+    
