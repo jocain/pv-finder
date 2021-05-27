@@ -1,3 +1,4 @@
+from __future__ import annotations
 import ROOT
 
 
@@ -9,42 +10,42 @@ def heavyFlavor(pid):
     return abs(pid) in (411, 421, 431, 4122, 511, 521, 531, 5122)
 
 
+class Vector:
+    def __init__(self) -> None:
+        self.this = ROOT.vector("double")()
+
+    def append(self, val: float | None) -> None:
+        self.this.push_back(0 if val is None else val)
+
+    def __len__(self) -> int:
+        return self.this.size()
+
+    def clear(self) -> None:
+        self.this.clear()
+
+
 # Writer class.
 class Writer:
-    def __init__(self):
-        from collections import OrderedDict
-
-        self.vars = OrderedDict()
+    def __init__(self, tree: ROOT.TTree) -> None:
+        self.tree = tree
+        self.vars = {}
         self.null = ROOT.vector("double")(1, 0)
 
-    def init(self, tree):
+    def __getitem__(self, key: str) -> Vector:
+        return self.vars[key]
+
+    def __enter__(self) -> Writer:
+        return self
+
+    def __exit__(self, *args) -> None:
         for key, val in self.vars.items():
-            tree.Branch(key, val)
+            self.tree.Branch(key, val.this)
 
     def add(self, var):
-        self.vars[var] = ROOT.vector("double")()
-
-    def var(self, var, val=None, idx=-2):
-        if not var in self.vars:
-            return self.null.back()
-        var = self.vars[var]
-        if idx < -1:
-            var.push_back(0 if val == None else val)
-        if idx < 0:
-            idx = var.size() - 1
-        elif idx >= var.size():
-            idx = -1
-        if idx < 0:
-            return self.null[0]
-        if val != None:
-            var[idx] = val
-        return var[idx]
-
-    def size(self, var):
-        return self.vars[var].size()
+        self.vars[var] = Vector()
 
     def clear(self):
-        for key, val in self.vars.items():
+        for val in self.vars.values():
             val.clear()
 
 
