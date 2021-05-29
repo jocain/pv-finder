@@ -24,7 +24,6 @@ class Vector:
         self.this.clear()
 
 
-# Writer class.
 class Writer:
     def __init__(self, tree: ROOT.TTree) -> None:
         self.tree = tree
@@ -34,15 +33,9 @@ class Writer:
     def __getitem__(self, key: str) -> Vector:
         return self.vars[key]
 
-    def __enter__(self) -> Writer:
-        return self
-
-    def __exit__(self, *args) -> None:
-        for key, val in self.vars.items():
-            self.tree.Branch(key, val.this)
-
     def add(self, var):
         self.vars[var] = Vector()
+        self.tree.Branch(key, self.vars[var].this)
 
     def clear(self):
         for val in self.vars.values():
