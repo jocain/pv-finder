@@ -55,6 +55,7 @@ def run(lname, tEvt):
 
     # New interface
     # Create the writer handler and add branches
+    writer = Writer(ttree)
     writer.add("pvr_x")
     writer.add("pvr_y")
     writer.add("pvr_z")
@@ -168,7 +169,6 @@ def run(lname, tEvt):
             if number_of_detected_particles > 0:
                 npv += 1
 
-        ttree.Fill()
         itime = time.time() - start
         ttime += itime
         if iEvt % 100 == 0:
@@ -177,7 +177,7 @@ def run(lname, tEvt):
                 name, iEvt, tEvt, npv, len(writer["pvr_z"]), itime
             )
         )
-        writer.clear()
+        writer.write()
 
     # Write and close the TTree and TFile.
     ttree.Print()

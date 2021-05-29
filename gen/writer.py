@@ -33,13 +33,17 @@ class Writer:
     def __getitem__(self, key: str) -> Vector:
         return self.vars[key]
 
-    def add(self, var):
+    def add(self, var: str) -> None:
         self.vars[var] = Vector()
         self.tree.Branch(key, self.vars[var].this)
 
-    def clear(self):
+    def clear(self) -> None:
         for val in self.vars.values():
             val.clear()
+
+    def write(self) -> None:
+        self.tree.Fill()
+        self.clear()
 
 
 def hitSel(mhit, fhit, pz):
