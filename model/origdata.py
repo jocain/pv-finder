@@ -8,7 +8,10 @@ import numba
 
 from .utilities import Timer
 from .jagged import concatenate
-import awkward
+try:
+    import awkward0 as awkward
+except ModuleNotFoundError:
+    import awkward
 
 dtype_X = np.float16
 dtype_Y = np.float16

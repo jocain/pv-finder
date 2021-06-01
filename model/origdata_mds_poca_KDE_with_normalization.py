@@ -28,7 +28,10 @@ import numba
 
 from .utilities import Timer
 from .jagged import concatenate
-import awkward
+try:
+    import awkward0 as awkward
+except ModuleNotFoundError:
+    import awkward
 
 import matplotlib.pyplot as plt
 fig_size = plt.rcParams["figure.figsize"]
