@@ -18,7 +18,6 @@
 ##  that should be passed along to the .hf5 files
 
 
-import uproot
 import numpy as np
 from pathlib import Path
 import sys
@@ -28,6 +27,10 @@ import numba
 
 from .utilities import Timer
 from .jagged import concatenate
+try:
+    import uproot3 as uproot
+except ModuleNotFoundError:
+    import uproot
 try:
     import awkward0 as awkward
 except ModuleNotFoundError:
