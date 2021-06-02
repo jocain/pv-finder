@@ -256,8 +256,9 @@ def calcProb(p1,p2,m1,m2,ma):
    
     return prob 
 
-#where p1 is a Xx3 matrix
-def calcProbMat(p1,p2,m1,m2,ma):
+#where p1 is a Xx3 matrix, calculates probability from the corner of voxels (if widths are 0), where p1 specifies the corners
+def calcProbMat(p1,p2,m1,m2,ma,width1,width2,width3):
+    p1 = np.add(p1, np.array([width1/2, width2/2, width3/2]) )
     xvec = np.add(p2,-p1)
     magsqm1 = np.dot(m1,m1)
     magsqm2 = np.dot(m2,m2)
