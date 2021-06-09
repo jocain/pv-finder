@@ -96,6 +96,10 @@ def get_device_from_model(model):
     else:
         return get_device_from_model(list(model.children())[0])
 
+    
+# presently, this version of load_full_state does not work
+# this version of load_full_state is for the OOP design of pv-finder models
+'''
 def load_full_state(model_to_update, Path, freeze_weights=False):
     """
     Load the model and optimizer state_dict, and the total number of epochs
@@ -104,11 +108,13 @@ def load_full_state(model_to_update, Path, freeze_weights=False):
 
     Args: 
             model_to_update (Module): Pytorch model with randomly initialized weights. These weights will be updated.
+            optimizer_to_update (Module): Optimizer with your learning rate set. 
             THIS FUNCTION WILL NOT UPDATE THE LEARNING RATE YOU SPECIFY.
             Path (string): If we are not training from scratch, this path should be the path to the "run_stats" file in the artifacts 
             directory of whatever run you are using as a baseline. 
             You can find the path in the MLFlow UI. It should end in /artifacts/run_stats  
             
+
     Returns:
             Nothing
 
@@ -116,31 +122,63 @@ def load_full_state(model_to_update, Path, freeze_weights=False):
             The model and optimizer will not be returned, rather the optimizer and module you pass to this function will be modified.
     """
     checkpoint = torch.load(Path)
-    
+    update_dict = {k: v for k, v in checkpoint['model'].items() if k in model_to_update.state_dict()}
+
+    ct = 0
+    if freeze_weights:
+        current_model_keys = set(model_to_update.state_dict().keys())
+        keys_to_update = set(checkpoint['model'].keys()).intersection(set(current_model_keys))
+        to_train = current_model_keys - keys_to_update  
+        return to_train
+        
+    if not freeze_weights:
+        model.load_state_dict(update_dict, strict=False)
+        print('Of the '+str(len(model_to_update.state_dict())/2)+' parameter layers to update in the current model, '+str(len(update_dict)/2)+' were loaded')
+'''
+
+def load_full_state(model_to_update, optimizer_to_update, Path, freeze_weights=False):
+    """
+    Load the model and optimizer state_dict, and the total number of epochs
+    The use case for this is if we care about the optimizer state_dict, which we do if we have multiple training 
+    sessions with momentum and/or learning rate decay. this will track the decay/momentum.
+    Args: 
+            model_to_update (Module): Pytorch model with randomly initialized weights. These weights will be updated.
+            optimizer_to_update (Module): Optimizer with your learning rate set. 
+            THIS FUNCTION WILL NOT UPDATE THE LEARNING RATE YOU SPECIFY.
+            Path (string): If we are not training from scratch, this path should be the path to the "run_stats" file in the artifacts 
+            directory of whatever run you are using as a baseline. 
+            You can find the path in the MLFlow UI. It should end in /artifacts/run_stats  
+            
+    Returns:
+            Nothing
+    Note:
+            The model and optimizer will not be returned, rather the optimizer and module you pass to this function will be modified.
+    """
+    checkpoint = torch.load(Path)
+
     # freeze weights of the first model
     update_dict = {k: v for k, v in checkpoint['model'].items() if k in model_to_update.state_dict()}
                 # do this so it does not use the learning rate from the previous run. this is unwanted behavior
                 # in our scenario since we are not using a learning rate scheduler, rather we want to tune the learning
                 # rate further after we have gotten past the stalling
-    
+            #     checkpoint['optimizer']['param_groups'][0]['lr'] = optimizer_to_update.state_dict()['param_groups'][0]['lr']
+            #     optimizer_to_update.load_state_dict(checkpoint['optimizer'])
+
     # to go back to old behavior, just do checkpoint['model'] instead of update_dict
     model_to_update.load_state_dict(update_dict, strict=False)
 
     ct = 0
     if freeze_weights:
         for k, v in model_to_update.named_children():
-#            print('k: ', k+'.0.weight')
-#            print('model keys: ', checkpoint['model'].keys())
-            print('weights: ', v[0].weight)
-            if (k+'.0.weight' in checkpoint['model'].keys()):
-                v[0].weight.requires_grad = False
-                v[0].bias.requires_grad = False
+            if ((k+'.weight' in checkpoint['model'].keys()) | (k+'.bias' in checkpoint['model'].keys())) & (k != 'Dropout'):
+                v.weight.requires_grad = False
+                v.bias.requires_grad = False
                 ct += 1
-                        
-    print('we also froze {} weights'.format(ct))
-    
-    print('Of the '+str(len(model_to_update.state_dict())/2)+' parameter layers to update in the current model, '+str(len(update_dict)/2)+' were loaded')
 
+    print('we also froze {} weights'.format(ct))
+
+    print('Of the '+str(len(model_to_update.state_dict())/2)+' parameter layers to update in the current model, '+str(len(update_dict)/2)+' were loaded')
+        
 def count_parameters(model):
     """
     Counts the total number of parameters in a model

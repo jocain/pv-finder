@@ -62,20 +62,18 @@ class Conv(nn.Sequential):
         super(Conv, self).__init__(
             nn.Conv1d(in_channels=INC, out_channels=OUTC, kernel_size=k_size, stride=1, padding=(k_size-1)//2),
             nn.BatchNorm1d(OUTC),
-            nn.Dropout(drop_rate),
-            nn.LeakyReLU(0.01)
+            nn.LeakyReLU(0.01),
+            nn.Dropout(drop_rate)
         )
 
 class Conv_No_BN(nn.Sequential):
-    ## convolution => BatchNorm => Dropout => LeakyReLU
+    ## convolution => Dropout => LeakyReLU
     def __init__(self, INC, OUTC, k_size=15, drop_rate=.15):
-        super(Conv, self).__init__(
+        super(Conv_No_BN, self).__init__(
             nn.Conv1d(in_channels=INC, out_channels=OUTC, kernel_size=k_size, stride=1, padding=(k_size-1)//2),
-            nn.Dropout(drop_rate),
-            nn.LeakyReLU(0.01)
+            nn.LeakyReLU(0.01),
+            nn.Dropout(drop_rate)
         )
-
-
 
 
 
@@ -1510,4 +1508,3 @@ class ACN_4i4_8L_DenseNet_BN(nn.Module):
         x = torch.nn.Softplus()(x)
 
         return x
-    
