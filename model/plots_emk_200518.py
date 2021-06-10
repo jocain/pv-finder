@@ -6,6 +6,12 @@ import numpy as np
 import math
 from matplotlib.patches import Ellipse
 from matplotlib.colors import Normalize
+import h5py
+try:
+    import awkward0 as awkward
+except ModuleNotFoundError:
+    import awkward
+concatenate = awkward.concatenate
 
 def gaussian(x, pos, width):
     height = 1/(width*math.sqrt(2*math.pi))
@@ -386,3 +392,68 @@ def getEllipses(event, pocas, min_z, max_z, axes, fig):
                  ax=axes[1], label='Position in z')
     fig.colorbar(ScalarMappable(norm=Normalize(vmin=min_z, vmax=max_z), cmap=cm),
                  ax=axes[2], label='Position in z')
+    
+def collect_poca(*files):
+    
+    #initialize lists
+    pocax_list = []
+    pocay_list = []
+    pocaz_list = []
+
+    majoraxisx_list = []
+    majoraxisy_list = []
+    majoraxisz_list = []
+
+    minoraxis1x_list = []
+    minoraxis1y_list = []
+    minoraxis1z_list = []
+    minoraxis2x_list = []
+    minoraxis2y_list = []
+    minoraxis2z_list = []
+
+    
+    #iterate through all files
+    for XY_file in files:
+        msg = f"Loaded {XY_file} in {{time:.4}} s"
+        with h5py.File(XY_file, mode="r") as XY:
+
+            #print keys in current hdf5 file
+            print(XY.keys())
+
+            afile = awkward.hdf5(XY)
+
+            #append to appropriate lists
+            pocax_list.append(afile["poca_x"])
+            pocay_list.append(afile["poca_y"])
+            pocaz_list.append(afile["poca_z"])
+
+            majoraxisx_list.append(afile["major_axis_x"])
+            majoraxisy_list.append(afile["major_axis_y"])
+            majoraxisz_list.append(afile["major_axis_z"])
+
+            minoraxis1x_list.append(afile["minor_axis1_x"])
+            minoraxis1y_list.append(afile["minor_axis1_y"])
+            minoraxis1z_list.append(afile["minor_axis1_z"])
+
+            minoraxis2x_list.append(afile["minor_axis2_x"])
+            minoraxis2y_list.append(afile["minor_axis2_y"])
+            minoraxis2z_list.append(afile["minor_axis2_z"])
+    
+    #construct pocas dictionary
+    pocas = {}
+    pocas["x"] = {"poca": concatenate(pocax_list),
+                  "major_axis": concatenate(majoraxisx_list),
+                  "minor_axis1": concatenate(minoraxis1x_list),
+                  "minor_axis2": concatenate(minoraxis2x_list)}
+
+    pocas["y"] = {"poca": concatenate(pocay_list),
+                  "major_axis": concatenate(majoraxisy_list),
+                  "minor_axis1": concatenate(minoraxis1y_list),
+                  "minor_axis2": concatenate(minoraxis2y_list)}
+
+    pocas["z"] = {"poca": concatenate(pocaz_list),
+                  "major_axis": concatenate(majoraxisz_list),
+                  "minor_axis1": concatenate(minoraxis1z_list),
+                  "minor_axis2": concatenate(minoraxis2z_list)}
+
+    return pocas
