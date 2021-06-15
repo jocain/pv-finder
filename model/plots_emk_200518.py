@@ -5,7 +5,7 @@ from matplotlib.cm import ScalarMappable
 import numpy as np
 import math
 from matplotlib.patches import Ellipse
-from matplotlib.colors import Normalizeß
+from matplotlib.colors import Normalize
 import h5py
 try:
     import awkward0 as awkward
