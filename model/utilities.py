@@ -136,7 +136,7 @@ def load_full_state(model_to_update, Path, freeze_weights=False):
         print('Of the '+str(len(model_to_update.state_dict())/2)+' parameter layers to update in the current model, '+str(len(update_dict)/2)+' were loaded')
 '''
 
-def load_full_state(model_to_update, optimizer_to_update, Path, freeze_weights=False):
+def load_full_state(model_to_update, Path, freeze_weights=False):
     """
     Load the model and optimizer state_dict, and the total number of epochs
     The use case for this is if we care about the optimizer state_dict, which we do if we have multiple training 
@@ -155,6 +155,10 @@ def load_full_state(model_to_update, optimizer_to_update, Path, freeze_weights=F
             The model and optimizer will not be returned, rather the optimizer and module you pass to this function will be modified.
     """
     checkpoint = torch.load(Path)
+    
+    # check weights before loading
+    # used for debugging; comment out otherwise
+    #print('UPDATE WEIGHTS', checkpoint['model'], file=open("output_1.txt", "a"))
 
     # freeze weights of the first model
     update_dict = {k: v for k, v in checkpoint['model'].items() if k in model_to_update.state_dict()}
@@ -178,6 +182,7 @@ def load_full_state(model_to_update, optimizer_to_update, Path, freeze_weights=F
     print('we also froze {} weights'.format(ct))
 
     print('Of the '+str(len(model_to_update.state_dict())/2)+' parameter layers to update in the current model, '+str(len(update_dict)/2)+' were loaded')
+    
         
 def count_parameters(model):
     """
