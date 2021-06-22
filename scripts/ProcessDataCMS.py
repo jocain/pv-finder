@@ -58,10 +58,10 @@ if __name__ == "__main__":
         "-t", "--tfile", type=Path, required=True, help="Set the track file (.txt)"
     )
     parser.add_argument(
-        "-tv", "--tvfile", type=Path, required=True, help="Set the truth vertex file (.txt)"
+        "--tvfile", type=Path, required=True, help="Set the truth vertex file (.txt)"
     )
     parser.add_argument(
-        "-tt", "--ttfile", type=Path, required=True, help="Set the truth track file (.txt)"
+        "--ttfile", type=Path, required=True, help="Set the truth track file (.txt)"
     )
 
     args = parser.parse_args()
