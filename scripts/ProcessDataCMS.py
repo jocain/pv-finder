@@ -45,7 +45,7 @@ if __name__ == "__main__":
         description="This processes multiple .txt files into a ROOT file containing tracks. "
         "An example of the usage is as follows: "
         "python ProcessDataCMS.py -o /output_path/output_file.root -v vertex_info.txt -t track_info.txt"
-        "-tv truth_vertex_info.txt -tt truth_track_info.txt"
+        "--tv truth_vertex_info.txt --tt truth_track_info.txt"
     )
 
     parser.add_argument(
