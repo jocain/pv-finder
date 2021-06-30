@@ -1,9 +1,5 @@
 #pragma once
 
-
-#define PVF_XSTR(s) PVF_STR(s)
-#define PVF_STR(s) #s
-
 #include <TTree.h>
 #include <array>
 
@@ -15,10 +11,12 @@ class DataKernelOut {
     std::array<float, NBINS> xmax{};
     std::array<float, NBINS> ymax{};
 
+    
+
     DataKernelOut(TTree *tree) : t(tree) {
-        t->Branch("zdata", zdata.data(), "zdata[" PVF_XSTR(NBINS) "]/F");
-        t->Branch("xmax", xmax.data(), "xmax[" PVF_XSTR(NBINS) " ]/F");
-        t->Branch("ymax", ymax.data(), "ymax[" PVF_XSTR(NBINS) "]/F");
+        t->Branch("zdata", zdata.data(), TString::Format("zdata[%d]/F", NBINS));
+        t->Branch("xmax", xmax.data(), TString::Format("xmax[%d]/F", NBINS));
+        t->Branch("ymax", ymax.data(), TString::Format("ymax[%d]/F", NBINS));
     }
 
     void clear() {
@@ -27,6 +25,3 @@ class DataKernelOut {
         ymax.fill(0);
     }
 };
-
-#undef PVF_XSTR
-#undef PVF_STR
