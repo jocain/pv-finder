@@ -183,3 +183,81 @@ def validate(model, loss, loader, device):
             total_loss += loss_output.data.item()
 
     return total_loss
+
+def measure_trainNet(
+    model,
+    optimizer,
+    loss,
+    train_loader,
+    val_loader,
+    n_epochs,
+    *,
+    notebook=None,
+    epoch_start=0,
+):
+    """
+    If notebook = None, no progress bar will be drawn. If False, this will be a terminal progress bar.
+    """
+
+    # Print all of the hyperparameters of the training iteration
+    if not notebook:
+        print("{0:=^80}".format(" HYPERPARAMETERS "))
+        print(
+            f"""\
+n_epochs: {n_epochs}
+batch_size: {train_loader.batch_size} events
+dataset_train: {train_loader.dataset.tensors[0].size()[0]} events
+dataset_val: {val_loader.dataset.tensors[0].size()[0]} events
+loss: {loss}
+optimizer: {optimizer}
+model: {model}"""
+        )
+        print("=" * 80)
+
+    # Set up notebook or regular progress bar (or none)
+    progress = import_progress_bar(notebook)
+
+    # Get the current device
+    device = get_device_from_model(model)
+
+    print(f"Number of batches: train = {len(train_loader)}, val = {len(val_loader)}")
+
+    epoch_iterator = progress(
+        range(epoch_start, n_epochs),
+        desc="Epochs",
+        postfix="train=start, val=start",
+        dynamic_ncols=True,
+        position=0,
+        file=sys.stderr,
+    )
+
+    print(f"Number of batches: train = {len(train_loader)}, val = {len(val_loader)}")
+
+
+    # Loop for n_epochs
+    for epoch in epoch_iterator:
+        training_start_time = time.time()
+
+        # Run the training step
+        total_train_loss = validate(model, loss, train_loader, device)
+        cost_epoch = total_train_loss / len(train_loader)
+
+        # At the end of the epoch, do a pass on the validation set
+        total_val_loss = validate(model, loss, val_loader, device)
+        val_epoch = total_val_loss / len(val_loader)
+
+        # Record total time
+        time_epoch = time.time() - training_start_time
+
+        # Pretty print a description
+        if hasattr(epoch_iterator, "postfix"):
+            epoch_iterator.postfix = f"train={cost_epoch:.4}, val={val_epoch:.4}"
+
+        # Redirect stdout if needed to avoid clash with progress bar
+        write = getattr(progress, "write", print)
+        write(
+            f"Epoch {epoch}: train={cost_epoch:.6}, val={val_epoch:.6}, took {time_epoch:.5} s"
+        )
+##        write(f"  Validation {cur_val_eff}")
+
+        yield Results(epoch, cost_epoch, val_epoch, time_epoch)

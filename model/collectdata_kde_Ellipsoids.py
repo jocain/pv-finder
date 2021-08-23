@@ -98,7 +98,7 @@ def collect_t2kde_data(
 ## we want to use the poca KDE, not the original kernel
             kernel = np.asarray(f["poca_KDE_A"]) + epsilon
             Xmax = 2500.*np.asarray(f["Xmax"])
-            Ymax = 2500.*np.asarray(f["Ymax"]) 
+            Ymax = 2500.*np.asarray(f["Ymax"])  
             
             Y = ja.concatenate((kernel,Xmax,Ymax),axis=1).astype(dtype_Y)
             

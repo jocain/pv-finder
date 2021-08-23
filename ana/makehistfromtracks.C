@@ -9,6 +9,9 @@
 #include <memory>
 #include <iostream>
 
+using namespace std;
+using namespace std::chrono;
+
 void makez(AnyTracks& tracks, DataKernelOut& dk);
 
 /// Run with e.g. root -b -q 'makehist.C+("10pvs","trks","../dat")'
@@ -34,8 +37,9 @@ void makehistfromtracks(TString input, TString tree_name, TString folder, bool i
         recon_out.reset(new CoreReconTracksOut(&tout));
 
     for(int i=0; i<ntrack; i++) {
+        auto start = high_resolution_clock::now();
         dk.clear();
-
+        
         CoreReconTracksIn data_recon(t);
         CoreNHitsIn data_nhits(t);
         CorePVsIn data_pvs(t);
@@ -52,8 +56,11 @@ void makehistfromtracks(TString input, TString tree_name, TString folder, bool i
             copy_in(*recon_out, tracks);
 
         makez(tracks, dk);
-
-        std::cout << " " << dt << std::endl;
+        
+        auto end = high_resolution_clock::now();
+        auto duration = duration_cast<microseconds>(end - start);
+        
+        std::cout << " " << dt << std::endl << " Time Taken:" << duration.count() << " ms" << endl;
         tout.Fill();
     }
 

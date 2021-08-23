@@ -11,7 +11,7 @@
 
 /// Convert raw data to tracks
 void make_tracks(TString input, TString tree_name, TString folder, bool include_recon = true) {
-    TFile f(folder + "/pv_"+input+".root");
+    TFile f(folder + "/pv_10Kpvs.root");
     TTree *t = (TTree*) f.Get(tree_name);
     if(t == nullptr)
         throw std::runtime_error("Failed to get hits from file");
