@@ -1,6 +1,6 @@
 # PV Finder
 
-Note: For information about DD+ model training performed in this work and associated notebooks/files/model settings, please look at Progress.txt
+Note: For information about DD+ model training performed in this work and associated notebooks/files/model settings, please look at notebooks/Progress.txt
 
 To download this repository:
 
