@@ -1,0 +1,720 @@
+Model Names
+     -5 Nodes: 5, 5, …, 5 
+     -5 to 20 Nodes: 5, 6, 8, 9, 11, 12, 14, 15, 17, 18, 20 
+     -20 Nodes: 20, 20, …, 20
+     -5 to 50 Nodes: 5, 9, 14, 18, 23, 27, 32, 36, 41, 45, 50
+     -50 Nodes: 50, 50, …, 50
+     -5 to 100 Nodes: 5, 13, 23, 31, 41, 49, 59, 67, 77, 85, 100
+     -100 Nodes: 100, 100, …, 100
+     -5 to 500 Nodes: 5, 7, 10, 25, 50, 75, 100, 150, 250, 350, 500
+     -500 Nodes: 500, 500, …, 500
+Setting Constants
+     -Batch Size: 64
+     -Optimizer: Adam
+     -Latent Channels: 8 (Default)
+All output files located in jgo_files
+Note that most, if not all, of the README files associated with completed runs are wrong with regards to latent channel info. The variable latentChannels was set to 4, but was omitted from the Model(Out1, …) line. 
+Notebooks:
+RunModel_Tracks_to_KDE_DDplus_it29_SetVar_Architecture_Comparison_jgo.ipynb
+	Primary notebook used to train DD+ models. Copies exist only for running things in parallel.
+Performance_Comparison_jgo_DDplus_EvolveView.ipynb
+For looking at all of the loss data. Separated in to stages base on how I organized training. Copies exist purely for looking at multiple sections on different monitors.
+Performance_Comparison_jgo_DDplus.ipynb
+	For looking at a single stage of DDplus training
+RunModel_Tracks_to_KDE_TestTrainedModel_20December-DDplus-jgo.ipynb
+For looking at KDE visualizations. Not materially different form file of same name without jgo, except modified to match file input method I used in my notebooks. 
+RunModel_Tracks_to_KDE_DDplus_it29_SetVar_Architecture_Freezing_Comparison_jgo.ipynb
+Almost exact same as RunModel_Tracks_to_KDE_DDplus_it29_SetVar_Architecture_Comparison_ jgo.ipynb, but facilitates weight freezing used in initial stage, kick
+
+ 
+Training Stages
+Stage 0: Standard DD Training
+     -Settings
+          ->Train Data
+             ->dataAA/20K_POCA_kernel_evts_200926.h5
+             ->slice(None, 18000)
+          ->Validation Data
+             ->dataAA/20K_POCA_kernel_evts_200926.h5
+             ->slice(18000, None)
+          ->KDE E Loss Used
+          ->Epochs: 500
+          ->Learning Rate: 1e-4
+Final States:
+     -5 Nodes
+          ->“Best” Training Loss: 11.237267199982988
+          ->“Best” Validation Loss: 11.212449550628662
+          ->Thrown Out due to Low Expectation of Success 
+     -5 to 20 Nodes
+          ->“Best” Training Loss: 11.242476006771655
+          ->“Best” Validation Loss: 11.216906130313873
+          ->Thrown Out due to Low Expectation of Success 
+     -20 Nodes
+          ->“Best” Training Loss: 9.306830005442842
+          ->“Best” Validation Loss: 9.232734978199005
+     -5 to 50 Nodes
+          ->“Best” Training Loss: 7.6988636754083295
+          ->“Best” Validation Loss: 7.596606761217117
+     -50 Nodes
+          ->“Best” Training Loss: 6.84347646287147
+          ->“Best” Validation Loss: 6.583519995212555
+     -5 to 100 Nodes
+          ->“Best” Training Loss: 8.45335236001522
+          ->“Best” Validation Loss: 8.45335236001522
+     -100 Nodes
+          ->“Best” Training Loss: 8.086590323887819
+          ->“Best” Validation Loss: 7.17996871471405
+     -5 to 500 Nodes
+          ->“Best” Training Loss: 6.516247571782863
+          ->“Best” Validation Loss: 6.368043303489685
+     -500 Nodes: 500, 500, …, 500
+          ->Thrown Out due to overflow on 3090 Memory
+
+Folders:
+     -20 Nodes
+          ->13July2021_DirtyDozen_SetVar_20_nodes_500_epochs_0.0001
+     -5 to 50 Nodes
+          ->13July2021_DirtyDozen_SetVar_5to50_nodes_500_epochs_0.0001
+     -50 Nodes	
+          ->13July2021_DirtyDozen_SetVar_50_nodes_500_epochs_0.0001
+     -5 to 100 Nodes
+          ->13July2021_DirtyDozen_SetVar_5to500_nodes_500_epochs_0.0001
+     -100 Nodes
+          ->14July2021_DirtyDozen_SetVar_5to100_nodes_500_epochs_0.0001
+     -5 to 500 Nodes
+          ->14July2021_DirtyDozen_SetVar_100_nodes_500_epochs_0.0001
+
+ 
+Stage 0.5: DD+ Training
+Note: This Training was ultimately not used in further progress. This is more “for the record.”
+     -Settings
+          ->Train Data
+             ->/share/lazy/will/data/June30_2020_80k_1.h5slice
+             ->/share/lazy/will/data/June30_2020_80k_2.h5 
+             ->/share/lazy/will/data/June30_2020_80k_3.h5 
+             ->/share/lazy/will/data/June30_2020_80k_4.h5 
+             ->slice(None, 10000) 
+          ->Validation Data
+             ->dataAA/20K_POCA_kernel_evts_200926.h5
+             ->slice(10000, None)
+          ->KDE Ba Loss Used
+          ->Epochs: 250
+          ->Learning Rate: 1e-5
+          ->Pretrain Using “Best” Model from Stage 0, decided by Validation Loss
+Final States:
+     -20 Nodes
+          ->End Training Loss: 14.149640848682186
+          ->End Validation Loss: 13.489077033510632 
+     -5 to 50 Nodes
+          ->End Training Loss: 14.149633389369697
+          ->End Validation Loss: 13.489077027436275
+     -50 Nodes
+          ->End Training Loss: 14.149633389369697
+          ->End Validation Loss: 13.489077027436275
+     -5 to 100 Nodes
+          ->Not run due to low likelihood of meaningful progress. Was Supposed to be the last model run.
+     -100 Nodes
+          ->End Training Loss: 11.81520095752303
+          ->End Validation Loss: 11.246448547217497
+     -5 to 500 Nodes
+          ->End Training Loss: 6.798869218036628
+          ->End Validation Loss: 6.990091837135849
+Folders:
+     -20 Nodes
+          ->07Feb_DDplus_loss_Ba_iter29_floatAll_SetVar_20_nodes_it0pretrain_250_epochs_1e-05
+     -5 to 50 Nodes
+          ->07Feb_DDplus_loss_Ba_iter29_floatAll_SetVar_5to50_nodes_it0pretrain_250_epochs_1e-05
+     -50 Nodes
+          ->07Feb_DDplus_loss_Ba_iter29_floatAll_SetVar_50_nodes_it0pretrain_250_epochs_1e-05
+     -5 to 100 Nodes
+          ->07Feb_DDplus_loss_Ba_iter29_floatAll_SetVar_5to100_it0pretrain_nodes_250_epochs_1e-05
+     -100 Nodes
+          ->07Feb_DDplus_loss_Ba_iter29_floatAll_SetVar_100_nodes_it0pretrain_250_epochs_1e-05
+     -5 to 500 Nodes
+          ->07Feb_DDplus_loss_Ba_iter29_floatAll_SetVar_5to500_nodes_it0pretrain_250_epochs_1e-05
+Stage 1: DD+ Training w/ Freezing
+Note: At the failure of the previous run to make meaningful progress, Professor Sokoloff recommended that I attempt freezing the first 10 layers, to set the layer before the convolutions as much as possible. This is that attempt. 
+     -Settings
+          ->Train Data
+             ->/share/lazy/will/data/June30_2020_80k_1.h5slice
+             ->/share/lazy/will/data/June30_2020_80k_2.h5 
+             ->/share/lazy/will/data/June30_2020_80k_3.h5 
+             ->/share/lazy/will/data/June30_2020_80k_4.h5 
+             ->slice(None, 10000) 
+          ->Validation Data
+             ->dataAA/20K_POCA_kernel_evts_200926.h5
+             ->slice(10000, None)
+          ->KDE Ba Loss Used
+          ->Epochs: 250
+          ->Learning Rate: 1e-5
+          ->Pretrain Using “Best” Model from Stage 0, decided by Validation Loss
+          ->First 10 Layers Frozen
+Final States:
+     -20 Nodes
+          ->End Training Loss: 14.149633395444056
+          ->End Validation Loss: 13.489077033510632
+     -5 to 50 Nodes
+          ->End Training Loss: 11.788579333360028
+          ->End Validation Loss: 11.224948099464369
+     -50 Nodes
+          ->End Training Loss: 14.149703888376807
+          ->End Validation Loss: 13.48907222261854
+     -5 to 100 Nodes
+          ->End Training Loss: 14.319237520740291
+          ->End Validation Loss: 13.489076997064481
+     -100 Nodes
+          ->End Training Loss: 9.437140097284013
+          ->End Validation Loss: 8.87347636860647
+     -5 to 500 Nodes
+          ->End Training Loss: 8.101642642051551
+          ->End Validation Loss: 7.9367643374546315
+Folders:
+     -20 Nodes
+          ->16July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_20_nodes_it0pretrain_250_epochs_1e-05
+     -5 to 50 Nodes
+          ->16July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to50_nodes_it0pretrain_250_epochs_1e-05
+     -50 Nodes
+          ->16July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_50_nodes_it0pretrain_250_epochs_1e-05
+
+     -5 to 100 Nodes
+          ->17July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to100_nodes_it0pretrain_250_epochs_1e-05
+     -100 Nodes
+          ->16July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_100_nodes_it0pretrain_250_epochs_1e-05
+     -5 to 500 Nodes
+          ->17July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to500_nodes_it0pretrain_250_epochs_1e-05
+
+ 
+Stage 2: DD+ Training
+Note: For next few stages, Simple DD+ training used. 
+     -Settings
+          ->Train Data
+             ->/share/lazy/will/data/June30_2020_80k_1.h5
+             ->/share/lazy/will/data/June30_2020_80k_2.h5 
+             ->/share/lazy/will/data/June30_2020_80k_3.h5 
+             ->/share/lazy/will/data/June30_2020_80k_4.h5 
+             ->slice(None, 10000) 
+          ->Validation Data
+             ->dataAA/20K_POCA_kernel_evts_200926.h5
+             ->slice(10000, None)
+          ->KDE Ba Loss Used
+          ->Epochs: 250
+          ->Learning Rate: 1e-5
+          ->Pretrain Using Final Model from Stage 1
+Final States:
+     -20 Nodes
+          ->End Training Loss: 14.149634531349134
+          ->End Validation Loss: 13.489076948469611
+     -5 to 50 Nodes
+          ->End Training Loss: 10.991521902145093
+          ->End Validation Loss: 10.443466915446482
+     -50 Nodes
+          ->End Training Loss: 9.694004802946832
+          ->End Validation Loss: 9.17404237978018
+     -5 to 100 Nodes
+          ->End Training Loss: 14.149771131527652
+          ->End Validation Loss: 13.489076881651666
+     -100 Nodes
+          ->End Training Loss: 6.454410042732385
+          ->End Validation Loss: 6.493486058180499
+     -5 to 500 Nodes
+          ->End Training Loss: 6.393475081510605
+          ->End Validation Loss: 6.973834851744828
+Folders:
+     -20 Nodes
+          ->19July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_20_nodes_it0pretrain_it29prefreeze_250_epochs_1e-05
+     -5 to 50 Nodes
+          ->19July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to50_nodes_it0pretrain_it29prefreeze_250_epochs_1e-05
+     -50 Nodes 
+          ->19July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_50_nodes_it0pretrain_it29prefreeze_250_epochs_1e-05
+
+
+     -5 to 100 Nodes
+          ->20July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to100_nodes_it0pretrain_it29prefreeze_250_epochs_1e-05
+     -100 Nodes
+          ->20July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_100_nodes_it0pretrain_it29prefreeze_250_epochs_1e-05
+     -5 to 500 Nodes
+          ->20July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to500_nodes_it0pretrain_250_epochs_1e-05
+ 
+Stage 2.5: Learning Rate
+For the 20 and 5 to 100, the models had not learned at all, so an attempt at kicking the model to a new place on the energy plane with a higher learning rate was made. 
+     -Settings
+          ->Train Data
+             ->/share/lazy/will/data/June30_2020_80k_1.h5
+             ->/share/lazy/will/data/June30_2020_80k_2.h5 
+             ->/share/lazy/will/data/June30_2020_80k_3.h5 
+             ->/share/lazy/will/data/June30_2020_80k_4.h5 
+             ->slice(None, 10000) 
+          ->Validation Data
+             ->dataAA/20K_POCA_kernel_evts_200926.h5
+             ->slice(10000, None)
+          ->KDE Ba Loss Used
+          ->Epochs: 50
+          ->Learning Rate: 1e-4
+          ->Pretrain Using Final Model from Stage 2
+Final States:
+     -20 Nodes
+          ->End Training Loss: 11.024816610251262
+          ->End Validation Loss: 10.440321615547132
+     -5 to 100 Nodes
+          ->End Training Loss: 10.250486583466742
+          ->End Validation Loss: 9.60917100481167
+     -5 to 500 Nodes
+          ->End Training Loss: 10.250486583466742
+          ->End Validation Loss: 9.60917100481167
+     -
+Folders:
+     -20 Nodes
+          ->22July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_20_nodes_unstick_attpt_50_epochs_0.0001
+     -5 to 50 Nodes
+          ->22July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to100_nodes_unstick_attpt_50_epochs_0.0001
+     -50 Nodes
+          ->28July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to500_nodes_unstick_attpt_50_epochs_1e-05
+ 
+Stage 2.75
+An attempt at a normal Stage 3 run was made with the 5 to 500 model, but the notebook failed. Upon looking at the output, it became clear that within a couple epochs, this model stalled as well. An attempt at kicking the model with a higher learning rate was made and was unsuccessful. A different kick attempt was made by freezing all but the last hidden layer, which was successful.
+     -Settings (5 to 500)
+          ->Train Data
+             ->/share/lazy/will/data/June30_2020_80k_1.h5
+             ->/share/lazy/will/data/June30_2020_80k_2.h5 
+             ->/share/lazy/will/data/June30_2020_80k_3.h5 
+             ->/share/lazy/will/data/June30_2020_80k_4.h5 
+             ->slice(None, 10000) 
+          ->Validation Data
+             ->dataAA/20K_POCA_kernel_evts_200926.h5
+             ->slice(10000, None)
+          ->KDE Ba Loss Used
+          ->Epochs: 50
+          ->Learning Rate: 1e-5
+          ->Pretrain Using Final Model from Stage 2
+Final States:
+     -5 to 500 Nodes
+          ->End Training Loss: 6.036049643899225
+          ->End Validation Loss: 6.795461937120765
+Folders:
+     -5 to 500 Nodes
+          ->28July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to500_nodes_unstick_attpt2_50_epochs_1e-05
+ 
+Stage 3: DD+ Training
+For next few, normal DD+ training.
+     -Settings
+          ->Train Data
+             ->/share/lazy/will/data/June30_2020_80k_1.h5slice
+             ->/share/lazy/will/data/June30_2020_80k_2.h5 
+             ->/share/lazy/will/data/June30_2020_80k_3.h5 
+             ->/share/lazy/will/data/June30_2020_80k_4.h5 
+             ->slice(None, 10000) 
+          ->Validation Data
+             ->dataAA/20K_POCA_kernel_evts_200926.h5
+             ->slice(10000, None)
+          ->KDE Ba Loss Used
+          ->Epochs: 250
+          ->Learning Rate: 1e-5
+          ->Pretrain Using Final Model from Stage 2 (Stage 2.5 for 20, 5 to 100 Node Models)
+Final States:
+     -20 Nodes
+          ->End Training Loss: 10.057634596612044
+          ->End Validation Loss: 9.661550063236504
+     -5 to 50 Nodes
+          ->End Training Loss: 9.776464109967469
+          ->End Validation Loss: 9.284850169139304
+     -50 Nodes
+          ->End Training Loss: 8.420003152956628
+          ->End Validation Loss: 8.024193888257264
+     -5 to 100 Nodes
+          ->End Training Loss:  8.644287048631414
+          ->End Validation Loss: 8.361581932966876
+     -100 Nodes: 100, 100, …, 100
+          ->End Training Loss: 5.3869172160033205
+          ->End Validation Loss: 6.216640821687735
+     -5 to 500 Nodes
+          ->End Training Loss: 5.115602066562434
+          ->End Validation Loss: 6.78951312022604
+Folders:
+     -20 Nodes
+          ->22July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_20_nodes_it29pretrain_250_epochs_1e-05
+     -5 to 50 Nodes
+          ->22July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to50_nodes_it29pretrain_250_epochs_1e-05
+     -50 Nodes 
+          ->22July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_50_nodes_it29pretrain_250_epochs_1e-05
+     -5 to 100 Nodes
+          ->22July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to100_nodes_it29pretrain_250_epochs_1e-05
+
+     -100 Nodes
+          ->22July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_100_nodes_it29pretrain_250_epochs_1e-05
+     -5 to 500 Nodes
+          ->28July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to500_nodes_it29pretrain_250_epochs_1e-05
+ 
+Stage 4
+     -Settings
+          ->Train Data
+             ->/share/lazy/will/data/June30_2020_80k_1.h5slice
+             ->/share/lazy/will/data/June30_2020_80k_2.h5 
+             ->/share/lazy/will/data/June30_2020_80k_3.h5 
+             ->/share/lazy/will/data/June30_2020_80k_4.h5 
+             ->slice(None, 10000) 
+          ->Validation Data
+             ->dataAA/20K_POCA_kernel_evts_200926.h5
+             ->slice(10000, None)
+          ->KDE Ba Loss Used
+          ->Epochs: 250
+          ->Learning Rate: 1e-5
+          ->Pretrain Using Final Model from Stage 3
+Final States:
+     -20 Nodes
+          ->Train Loss: 9.152987993446885
+          ->Test Loss: 8.926450820485497
+     -5 to 50 Nodes
+          ->Train Loss: 9.036505538187209
+          ->Test Loss: 8.64705069049908
+     -50 Nodes
+          ->Train Loss: 7.747243197860231
+          ->Test Loss: 7.534257226688847
+     -5 to 100 Nodes
+          ->Train Loss: 7.899259539926128
+          ->Test Loss: 7.934346435935634
+     -100 Nodes
+          ->Train Loss: 4.797405668125031
+          ->Test Loss: 6.015949762550888
+     -5 to 500 Nodes
+          ->Train Loss: 4.52679087705673
+          ->Test Loss: 7.243923627646866
+
+Folders:
+     -20 Nodes
+          ->23July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_20_nodes_it29pretrain_250_epochs_1e-05
+     -5 to 50 Nodes
+          ->23July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to50_nodes_it29pretrain_250_epochs_1e-05
+     - 50 Nodes 
+          ->23July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_50_nodes_it29pretrain_250_epochs_1e-05
+     -5 to 100 Nodes
+          ->23July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to100_nodes_it29pretrain_250_epochs_1e-05
+     - 100 Nodes
+          ->23July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_100_nodes_it29pretrain_250_epochs_1e-05
+     - 5 to 500 Nodes
+          ->28July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to500_nodes_it29pretrain2_250_epochs_1e-05
+ 
+Stage 5
+     -Settings
+          ->Train Data
+             ->/share/lazy/will/data/June30_2020_80k_1.h5slice
+             ->/share/lazy/will/data/June30_2020_80k_2.h5 
+             ->/share/lazy/will/data/June30_2020_80k_3.h5 
+             ->/share/lazy/will/data/June30_2020_80k_4.h5 
+             ->slice(None, 10000) 
+          ->Validation Data
+             ->dataAA/20K_POCA_kernel_evts_200926.h5
+             ->slice(10000, None)
+          ->KDE Ba Loss Used
+          ->Epochs: 250
+          ->Learning Rate: 1e-5
+          ->Pretrain Using Final Model from Stage 4
+Final States:
+     -20 Nodes
+          ->Train Loss: 8.453920267190144
+          ->Test Loss: 8.234828578438728
+     -5 to 50 Nodes
+          ->Train Loss: 8.352286095831804
+          ->Test Loss: 8.03046698175418
+     -50 Nodes
+          ->Train Loss: 7.291797908248415
+          ->Test Loss: 7.152372752025628
+     -5 to 100 Nodes
+          ->Train Loss: 6.833224071818552
+          ->Test Loss: 7.2441344352284815
+     -100 Nodes
+          ->Train Loss: 4.487040416450258
+          ->Test Loss: 5.880426197294977
+     -5 to 500 Nodes
+          ->Train Loss: 4.128795389916487
+          ->Test Loss: 6.977128836759336
+Folders:
+     -20 Nodes
+          ->26July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_20_nodes_it29pretrain_250_epochs_1e-05
+     -5 to 50 Nodes
+          ->28July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to50_nodes_it29pretrain_250_epochs_1e-05
+     -50 Nodes 
+          ->28July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_50_nodes_it29pretrain_250_epochs_1e-05 
+     -5 to 100 Nodes
+          ->28July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to100_nodes_it29pretrain_250_epochs_1e-05
+     -100 Nodes
+          ->28July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_100_nodes_it29pretrain_250_epochs_1e-05
+
+     -5 to 500 Nodes
+          ->29July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to500_nodes_it29pretrain_250_epochs_1e-05
+ 
+Stage 6
+Overtraining went unnoticed in previous stages, but validation began getting worse as opposed so simple training/validation loss divergence. Thus, expanded data set attempt used for 5 to 500. Standard training for all else. 
+     -Settings
+          ->Train Data
+             ->/share/lazy/will/data/June30_2020_80k_1.h5slice
+             ->/share/lazy/will/data/June30_2020_80k_2.h5 
+             ->/share/lazy/will/data/June30_2020_80k_3.h5 
+             ->/share/lazy/will/data/June30_2020_80k_4.h5 
+             ->slice(None, 10000) 
+          ->Validation Data
+             ->dataAA/20K_POCA_kernel_evts_200926.h5
+             ->slice(10000, None)
+          ->KDE Ba Loss Used
+          ->Epochs: 250
+          ->Learning Rate: 1e-5
+          ->Pretrain Using Final Model from Stage 5
+Final States:
+     -20 Nodes
+          ->Train Loss: 7.932231204524921
+          ->Test Loss: 7.859370805655315
+     -5 to 50 Nodes
+          ->Train Loss: 7.913409524662479
+          ->Test Loss: 7.649642573800056
+     -50 Nodes
+          ->Train Loss: 6.899590504397253
+          ->Test Loss: 7.054993514042751
+     -5 to 100 Nodes
+          ->Train Loss: 6.210782294060774
+          ->Test Loss: 7.260198893820404
+     -100 Nodes
+          ->Train Loss: 4.256912425824791
+          ->Test Loss: 6.194330756072026
+
+Folders:
+     -20 Nodes
+          ->28July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_20_nodes_it29pretrain2_250_epochs_1e-05
+     -5 to 50 Nodes
+          ->28July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to50_nodes_it29pretrain2_250_epochs_1e-05
+     -50 Nodes 
+          ->28July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_50_nodes_it29pretrain2_250_epochs_1e-05
+     -5 to 100 Nodes
+          ->29July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to100_nodes_it29pretrain_250_epochs_1e-05
+
+     -100 Nodes
+          ->29July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_100_nodes_it29pretrain_250_epochs_1e-05
+ 
+Stage 6.5
+ As mentioned before, overtraining went unnoticed in previous stages, but validation began getting worse as opposed so simple training/validation loss divergence. Thus, expanded data set attempt used for 5 to 500. However, due to a misunderstanding of how slice worked, more data loaded, but same data used. 
+     -Settings
+          ->Train Data
+             ->/share/lazy/will/data/June30_2020_80k_1.h5
+             ->/share/lazy/will/data/June30_2020_80k_2.h5 
+             ->/share/lazy/will/data/June30_2020_80k_3.h5 
+             ->/share/lazy/will/data/June30_2020_80k_4.h5 
+             ->/share/lazy/will/data/June30_2020_80k_5.h5 
+             ->/share/lazy/will/data/June30_2020_80k_6.h5 
+             ->/share/lazy/will/data/June30_2020_80k_7.h5 
+          ->
+             ->slice(None, 10000) 
+          ->Validation Data
+             ->dataAA/20K_POCA_kernel_evts_200926.h5
+             ->slice(10000, None)
+          ->KDE Ba Loss Used
+          ->Epochs: 250
+          ->Learning Rate: 1e-5
+          ->Pretrain Using Final Model from Stage 2 (Stage 2.5 for 20, 5 to 100 Node Models)
+Final States:
+     -5 to 500 Nodes
+          ->Train Loss: 3.7888786564966677
+          ->Test Loss: 7.2390542880744695
+Folders:
+     -5 to 500 Nodes
+          ->29July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to500_nodes_exp_trainset_250_epochs_1e-05
+ 
+Stage 7:
+Overtraining now noticed in the 100 model. Likely for reason mentioned in Stage 6, overtraining in 5 to 500 is not resolved. 5 to 500 and 100 model used expanded (but not really) data set again, where all others continued on same training method as before. 
+Final States:
+     -20 Nodes
+          ->Train Loss: 7.932231204524921
+          ->Test Loss: 7.859370805655315
+
+     -5 to 50 Nodes
+          ->Train Loss: 7.913409524662479
+          ->Test Loss: 7.649642573800056
+
+     -50 Nodes
+          ->Train Loss: 6.899590504397253
+          ->Test Loss: 7.054993514042751
+Folders:
+     -20 Nodes
+          ->28July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_20_nodes_it29pretrain2_250_epochs_1e-05
+     -5 to 50 Nodes
+          ->28July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to50_nodes_it29pretrain2_250_epochs_1e-05
+     -50 Nodes 
+          ->28July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_50_nodes_it29pretrain2_250_epochs_1e-05
+ 
+Stage 7.5:
+
+Again, overtraining noticed in 5 to 500 and 100, so expanded data set training attempted, but same mistake. 
+Midway through training, understood mistake, and did not pursue training for 100 node model. 
+     -Settings
+          ->Train Data
+             ->/share/lazy/will/data/June30_2020_80k_1.h5slice
+             ->/share/lazy/will/data/June30_2020_80k_2.h5 
+             ->/share/lazy/will/data/June30_2020_80k_3.h5 
+             ->/share/lazy/will/data/June30_2020_80k_4.h5 
+             ->/share/lazy/will/data/June30_2020_80k_5.h5 
+             ->/share/lazy/will/data/June30_2020_80k_6.h5 
+             ->/share/lazy/will/data/June30_2020_80k_7.h5 
+             ->slice(None, 10000) 
+          ->Validation Data
+             ->dataAA/20K_POCA_kernel_evts_200926.h5
+             ->slice(10000, None)
+          ->KDE Ba Loss Used
+          ->Epochs: 250
+          ->Learning Rate: 1e-5
+          ->Pretrain Using Final Model from Stage 6/6.5, which ever applicable
+
+Final States:
+     -100 Nodes
+          ->Not run
+
+     -5 to 500 Nodes
+          ->Train Loss: 3.6945058259235064
+          ->Test Loss: 7.774490365556851
+
+
+Folders:
+     -100 Nodes
+          ->29July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_100_nodes_exp_trainset2_250_epochs_1e-05
+     - 5 to 500 Nodes
+          ->29July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to500_nodes_exp_trainset2_250_epochs_1e-05
+ 
+Stage 8: Sliceless Expanded Data Set
+     -Settings
+          ->Train Data
+             ->/share/lazy/will/data/June30_2020_80k_1.h5slice
+             ->/share/lazy/will/data/June30_2020_80k_2.h5 
+             ->/share/lazy/will/data/June30_2020_80k_3.h5 
+             ->/share/lazy/will/data/June30_2020_80k_4.h5 
+             ->No Slice Used
+          ->Validation Data
+             ->dataAA/20K_POCA_kernel_evts_200926.h5
+             ->No Slice Used
+          ->KDE Ba Loss Used
+          ->Epochs: 250
+          ->Learning Rate: 1e-5
+          ->Pretrain Using Final Model from Stage 7/7.5, whichever applicable
+Final States:
+     -20 Nodes
+          ->Train Loss: 4.382812845373154
+          ->Test Loss: 4.215843912130728
+
+     -5 to 50 Nodes
+          ->Train Loss: 5.887189449453354
+          ->Test Loss: 4.935055306163459
+
+     -50 Nodes
+          ->Train Loss: 4.851768040084839
+          ->Test Loss: 4.448583702690685
+
+     -5 to 100 Nodes
+          ->Train Loss: 4.010742273902893
+          ->Test Loss: 3.897427951946807
+
+     -100 Nodes
+          ->Train Loss: 3.4820433751583098
+          ->Test Loss: 2.9226371160330484
+
+     -5 to 500 Nodes
+          ->Train Loss: 3.1508992201805115
+          ->Test Loss: 2.849359033968502
+
+Folders:
+     -20 Nodes
+          ->29July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_20_nodes_sliceless_250_epochs_1e-05
+     -5 to 50 Nodes
+          ->30July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to50_nodes_sliceless_250_epochs_1e-05
+          ->01August2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to50_nodes_sliceless_finisher_175_epochs_1e-05
+          ->02August2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to50_nodes_sliceless_finisher_127_epochs_1e-05
+     - 50 Nodes
+          -> 02August2021_DDplus_loss_Ba_iter29_floatAll_SetVar_50_nodes_sliceless_250_epochs_1e-05
+     - 5 to 100 Nodes
+          ->29July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to100_nodes_sliceless_250_epochs_1e-05
+     -100 Nodes
+          ->30July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_100_nodes_sliceless_250_epochs_1e-05
+          -> 01August2021_DDplus_loss_Ba_iter29_floatAll_SetVar_100_nodes_sliceless_finisher_216_epochs_1e-05
+          ->02August2021_DDplus_loss_Ba_iter29_floatAll_SetVar_100_nodes_sliceless_finisher_167_epochs_1e-05
+     -5 to 500 Nodes
+          ->29July2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to500_nodes_sliceless_250_epochs_1e-05
+          ->01August2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to500_nodes_sliceless_finisher_29_epochs_1e-05
+
+ 
+Stage 9/10:
+I am combining these stages in the notes because the intention was a run of 100 epochs, then a run of 250 epochs, but I accidentally flipped them for some of the models, so really it amounts to a run of 350 epochs. Expanded dataset even further, but with lower learning rate. This stage was not completed for all models, as focus was shifted to loss recovery from other models. 
+     -Settings
+          ->Train Data
+             ->/share/lazy/will/data/June30_2020_80k_1.h5slice
+             ->/share/lazy/will/data/June30_2020_80k_2.h5 
+             ->/share/lazy/will/data/June30_2020_80k_3.h5 
+             ->/share/lazy/will/data/June30_2020_80k_4.h5 
+             ->/share/lazy/will/data/June30_2020_80k_5.h5 
+             ->/share/lazy/will/data/June30_2020_80k_6.h5 
+             ->/share/lazy/will/data/June30_2020_80k_7.h5 
+             ->No Slice used. 
+          ->Validation Data
+             ->dataAA/20K_POCA_kernel_evts_200926.h5
+             ->No Slice Used
+          ->KDE Ba Loss Used
+          ->Epochs: 250
+          ->Learning Rate: 1e-5
+          ->Pretrain Using Final Model from Stage 8
+Final States:
+     -20 Nodes
+          ->Train Loss: 3.7661484625952584
+          ->Test Loss: 3.3244028411353357
+
+     -5 to 50 Nodes
+          ->Train Loss: 4.9945168893814085
+          ->Test Loss: 4.312152930341971
+
+     -50 Nodes
+          ->Train Loss: 3.9988358566556657
+          ->Test Loss: 3.3720611474765376
+
+     -5 to 100 Nodes
+          ->Train Loss: 3.2763431753703527
+          ->Test Loss: 2.9795411691878932
+
+     -100 Nodes
+          ->Train Loss: 3.4020123935426985
+          ->Test Loss: 2.8596246113030674
+
+     -5 to 500 Nodes
+          ->Train Loss: 2.814268037056923 
+          ->Test Loss: 2.7428917138340374
+Folders:
+     -20 Nodes
+          ->04August2021_DDplus_loss_Ba_iter29_floatAll_SetVar_20_nodes_exp_trainset_slow_100_epochs_1e-06
+          ->05August2021_DDplus_loss_Ba_iter29_floatAll_SetVar_20_nodes_exp_trainset_slow_250_epochs_1e-06
+          ->07August2021_DDplus_loss_Ba_iter29_floatAll_SetVar_20_nodes_exp_trainset_slow_finisher_103_epochs_1e-06
+          ->08August2021_DDplus_loss_Ba_iter29_floatAll_SetVar_20_nodes_exp_trainset_slow_finisher2_85_epochs_1e-06
+     -5 to 50 Nodes
+          ->08August2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to50_nodes_exp_trainset_slow_250_epochs_1e-06
+          ->10August2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to50_nodes_exp_trainset_slow_107_epochs_1e-06
+          ->10August2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to50_nodes_exp_trainset_slow_finisher_102_epochs_1e-06
+          ->11August2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to50_nodes_exp_trainset_slow_finisher_33_epochs_1e-06
+     -50 Nodes 
+          ->04August2021_DDplus_loss_Ba_iter29_floatAll_SetVar_50_nodes_exp_trainset_slow_100_epochs_1e-06
+          ->05August2021_DDplus_loss_Ba_iter29_floatAll_SetVar_50_node_exp_trainset_slow_250_epochs_1e-06
+          ->07August2021_DDplus_loss_Ba_iter29_floatAll_SetVar_50_node_exp_trainset_slow_finisher_95_epochs_1e-06
+          ->08August2021_DDplus_loss_Ba_iter29_floatAll_SetVar_50_node_exp_trainset_slow_finisher2_71_epochs_1e-06
+     -5 to 100 Nodes
+          ->04August2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to100_nodes_exp_trainset_slow_100_epochs_1e-06
+          ->05August2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to100_nodes_exp_trainset_slow_250_epochs_1e-06
+          ->07August2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to100_nodes_exp_trainset_slow_finisher_71_epochs_1e-06
+          ->08August2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to100_nodes_exp_trainset_slow_finisher2_47_epochs_1e-06
+     -100 Nodes
+          ->03August2021_DDplus_loss_Ba_iter29_floatAll_SetVar_100_nodes_exp_trainset_slow_500_epochs_1e-06
+          ->08August2021_DDplus_loss_Ba_iter29_floatAll_SetVar_100_node_exp_trainset_slow_finisher_164_epochs_1e-06
+          ->10August2021_DDplus_loss_Ba_iter29_floatAll_SetVar_100_node_exp_trainset_slow_finisher_28_epochs_1e-06
+          ->10August2021_DDplus_loss_Ba_iter29_floatAll_SetVar_100_node_exp_trainset_slow_finisher2_22_epochs_1e-06
+ 
+     -5 to 500 Nodes
+          ->09August2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to500_nodes_exp_trainset_slow_250_epochs_1e-06
+          ->10August2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to500_nodes_exp_trainset_slow_185_epochs_1e-06
+          ->10August2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to500_nodes_exp_trainset_slow_finisher_181_epochs_1e-06
+          ->11August2021_DDplus_loss_Ba_iter29_floatAll_SetVar_5to500_nodes_exp_trainset_slow_finisher_128_epochs_1e-06
+
+
+Notebooks to be ignored:
+RunModel_Tracks_to_KDE_DDplus_it29_SetVar_Architecture_Comparison_jgo_expanded_training_set
+ Not materially different from other SetVar_Architecture_Comparision notebooks, but was when I figured out the slicing issue, and ultimately just used the original SetVar notebook (and direct copies)
+RunModel_Tracks_to_KDE_DDplus_it29_SetVar_Architecture_Comparison_jgo-Old.ipynb
+	Honestly do not remember specifically why I switched from this one. 
+Skimmer.ipynb
+	Only used for searching old files in failed attempt to find specific model files (pyt) and stats files (hdf5) 	
